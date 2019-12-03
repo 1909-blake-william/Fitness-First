@@ -1,21 +1,5 @@
 package com.revature.daos;
 
-import java.util.List;
+public class UserDao {
 
-import com.revature.daoSQLs.UserDaoSQL;
-import com.revature.models.User;
-
-public interface UserDao {
-	
-	UserDao currentImplementation = new UserDaoSQL();
-
-	int save(User u);
-
-	List<User> findAll();
-
-	User findById(int ersUserId);
-
-	User findByUsernameAndPassword(String username, String password);
-
-	User findByUsername(String username);
 }
