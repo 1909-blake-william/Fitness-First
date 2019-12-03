@@ -1,5 +1,5 @@
 package com.revature.daos;
 
-public interface WorkoutDao {
+public class WorkoutDao {
 
 }
