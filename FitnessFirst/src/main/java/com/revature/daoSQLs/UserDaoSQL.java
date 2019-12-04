@@ -1,27 +1,32 @@
 package com.revature.daoSQLs;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.daos.UserDao;
 import com.revature.models.User;
+import com.revature.utilities.ConnectionUtility;
 
 public class UserDaoSQL implements UserDao {
 	
 	User extractUser(ResultSet rs) throws SQLException {
 		 int rsUserId = rs.getInt("user_id");
 		 String rsUsername = rs.getString("username");
-		 String rsUserPassword = rs.getString("password");
-		 String rsFirstname = rs.getString("first_name");
-		 String rsLastname = rs.getString("last_name");
+		 String rsUserPassword = rs.getString("user_password");
+		 String rsFirstname = rs.getString("firstname");
+		 String rsLastname = rs.getString("lastname");
 		 String rsEmail = rs.getString("email");
 		 String rsGender = rs.getString("gender");
 		 int rsHeight = rs.getInt("height");
 		 int rsWeight = rs.getInt("weight");
 		 String rsConsiderations = rs.getString("considerations"); 
 		 int rsUserLevel = rs.getInt("user_level");
-		 int rsUserPoints = rs.getInt("user_points");
+		 int rsUserPoints = rs.getInt("points");
 		return new User(rsUserId, rsUsername, rsUserPassword, rsFirstname, rsLastname, rsEmail, rsGender, 
 				rsHeight, rsWeight, rsConsiderations, rsUserLevel, rsUserPoints);
 		
@@ -33,8 +38,25 @@ public class UserDaoSQL implements UserDao {
 	}
 
 	public List<User> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		try (Connection c = ConnectionUtility.getConnection()) {
+
+			String sql = "SELECT * FROM wger_user";
+
+			PreparedStatement ps = c.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			List<User> users = new ArrayList<User>();
+			while (rs.next()) {
+				users.add(extractUser(rs));
+			}
+
+			return users;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+//			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public User findById(int ersUserId) {
@@ -43,9 +65,27 @@ public class UserDaoSQL implements UserDao {
 	}
 
 	public User findByUsernameAndPassword(String username, String password) {
-		// TODO Auto-generated method stub
+		try (Connection c = ConnectionUtility.getConnection()) {
+
+			Statement statement = c.createStatement();
+		String sql = "SELECT * FROM wger_user WHERE username = '" + username + "' AND user_password = '" + password
+				+ "'";
+		ResultSet rs = statement.executeQuery(sql);
+		if (rs.next()) {
+
+			return extractUser(rs);
+		} else {
+			return null;
+		}
+
+	} catch (SQLException e) { 
+		
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 		return null;
 	}
+}
+	
 
 	public User findByUsername(String username) {
 		// TODO Auto-generated method stub

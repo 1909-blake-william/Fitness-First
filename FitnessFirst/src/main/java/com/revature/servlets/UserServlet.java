@@ -8,15 +8,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.daos.UserDao;
 import com.revature.models.User;
 import com.revature.utilities.OmSingleton;
 
-public class UserServlet extends HttpServlet{
-	
+public class UserServlet extends HttpServlet {
+
 	private UserDao userDao = UserDao.currentImplementation;
-	
+
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		super.service(req, resp);
@@ -30,18 +29,14 @@ public class UserServlet extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-resp.getWriter().write("connected");
-		
-		
+		resp.getWriter().write("connected");
+
 		List<User> users;
 
 		users = userDao.findAll();
 
-		
-		String json = OmSingleton.writeValueAsString(users);
-
 		resp.addHeader("content-type", "application/json");
-		resp.getWriter().write(json);
-		
+		resp.getOutputStream().write(OmSingleton.write(users));
+
 	}
 }

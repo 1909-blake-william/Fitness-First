@@ -2,16 +2,25 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <display-name>FitnessFirst</display-name>
 
+
 <servlet>
-	<servlet-name>FitnessFirstServlet</servlet-name>
-	<servlet-class>com.revature.servlets.FitnessFirst</servlet-class>
-	
-	<load-on-startup>1</load-on-startup>
-</servlet>
+    <servlet-name>UserServlet</servlet-name>
+    <servlet-class>com.revature.servlets.UserServlet</servlet-class>
+  </servlet>
+ <servlet>
+    <servlet-name>AuthServlet</servlet-name>
+    <servlet-class>com.revature.servlets.AuthServlet</servlet-class>
+  </servlet>
 
 <servlet-mapping>
-	<servlet-name>FitnessFirst</servlet-name>
-	<url-pattern>/fitnessfirst/*</url-pattern>
-</servlet-mapping>
+    <servlet-name>UserServlet</servlet-name>
+    <url-pattern>/users</url-pattern>
+  </servlet-mapping>
+<servlet-mapping>
+    <servlet-name>AuthServlet</servlet-name>
+    <url-pattern>/auth/*</url-pattern>
+  </servlet-mapping>
+
+
 
 </web-app>

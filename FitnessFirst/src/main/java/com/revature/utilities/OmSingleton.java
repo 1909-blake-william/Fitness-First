@@ -47,16 +47,7 @@ public class OmSingleton {
 	}
 
 
-	public static User readValue(BufferedReader reader, Class<User> class1) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public static String writeValueAsString(Object attribute) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 
 }
