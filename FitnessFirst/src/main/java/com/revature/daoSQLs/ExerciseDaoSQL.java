@@ -64,38 +64,180 @@ public class ExerciseDaoSQL implements ExerciseDao {
 
 	@Override
 	public List<Exercise> filterForBeginnerUB() {
-		// TODO Auto-generated method stub
-		return null;
+try (Connection c = ConnectionUtility.getConnection()) {
+			
+
+			String sql = selectStatement +
+					" WHERE exercise_type = 4 " + 
+					" OR exercise_type = 7" + 
+					" AND muscle = 8 OR muscle = 11 OR muscle = 12 OR muscle = 13";
+
+			PreparedStatement ps = c.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			List<Exercise> exercises = new ArrayList<>();
+			while (rs.next()) {
+				exercises.add(extractExercises(rs));
+			}
+
+			return exercises;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
 	public List<Exercise> filterForBeginnerLB() {
-		// TODO Auto-generated method stub
-		return null;
+try (Connection c = ConnectionUtility.getConnection()) {
+			
+
+			String sql = "SELECT" + 
+					" EXERCISE_NAME ," + 
+					" MUSCLE ," + 
+					" EXERCISE_TYPE ," + 
+					" EXERCISE_DESCRIPTION FROM exercise" + 
+					" WHERE exercise_type = 4 " + 
+					" OR exercise_type = 7" + 
+					" AND muscle = 9 OR muscle = 14";
+
+			PreparedStatement ps = c.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			List<Exercise> exercises = new ArrayList<>();
+			while (rs.next()) {
+				exercises.add(extractExercises(rs));
+			}
+
+			return exercises;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
 	public List<Exercise> filterForIntermediateUB() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+try (Connection c = ConnectionUtility.getConnection()) {
+			
+	String sql = "SELECT" + 
+			" EXERCISE_NAME ," + 
+			" MUSCLE ," + 
+			" EXERCISE_TYPE ," + 
+			" EXERCISE_DESCRIPTION FROM exercise" + 
+			" WHERE exercise_type = 4 " + 
+			" OR exercise_type = 7" + " OR exercise_type = 6" + " OR exercise_type = 5" + " OR exercise_type = 3" + 
+			" AND muscle = 8 OR muscle = 11 OR muscle = 12 OR muscle = 13";
 
+			
+			PreparedStatement ps = c.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			List<Exercise> exercises = new ArrayList<>();
+			while (rs.next()) {
+				exercises.add(extractExercises(rs));
+			}
+
+			return exercises;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 	@Override
 	public List<Exercise> filterForIntermediateLB() {
-		// TODO Auto-generated method stub
-		return null;
+try (Connection c = ConnectionUtility.getConnection()) {
+			
+
+			String sql = "SELECT" + 
+					" EXERCISE_NAME ," + 
+					" MUSCLE ," + 
+					" EXERCISE_TYPE ," + 
+					" EXERCISE_DESCRIPTION FROM exercise" + 
+					" WHERE exercise_type = 4 " + 
+					" OR exercise_type = 7" + " OR exercise_type = 6" + " OR exercise_type = 5" + " OR exercise_type = 3" + 
+					" AND muscle = 9 OR muscle = 14";
+
+			PreparedStatement ps = c.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			List<Exercise> exercises = new ArrayList<>();
+			while (rs.next()) {
+				exercises.add(extractExercises(rs));
+			}
+
+			return exercises;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
+
 
 	@Override
 	public List<Exercise> filterForAdvancedUB() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		try (Connection c = ConnectionUtility.getConnection()) {
+			
+			String sql = "SELECT" + 
+					" EXERCISE_NAME ," + 
+					" MUSCLE ," + 
+					" EXERCISE_TYPE ," + 
+					" EXERCISE_DESCRIPTION FROM exercise" + 
+					" WHERE muscle = 8 OR muscle = 11 OR muscle = 12 OR muscle = 13";
+
+					
+					PreparedStatement ps = c.prepareStatement(sql);
+
+					ResultSet rs = ps.executeQuery();
+					List<Exercise> exercises = new ArrayList<>();
+					while (rs.next()) {
+						exercises.add(extractExercises(rs));
+					}
+
+					return exercises;
+
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				}
+			}
 
 	@Override
 	public List<Exercise> filterForAdvancedLB() {
-		// TODO Auto-generated method stub
-		return null;
+try (Connection c = ConnectionUtility.getConnection()) {
+			
+
+			String sql = "SELECT" + 
+					" EXERCISE_NAME ," + 
+					" MUSCLE ," + 
+					" EXERCISE_TYPE ," + 
+					" EXERCISE_DESCRIPTION FROM exercise" + 
+					" WHERE muscle = 9 OR muscle = 14";
+
+			PreparedStatement ps = c.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			List<Exercise> exercises = new ArrayList<>();
+			while (rs.next()) {
+				exercises.add(extractExercises(rs));
+			}
+
+			return exercises;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }
