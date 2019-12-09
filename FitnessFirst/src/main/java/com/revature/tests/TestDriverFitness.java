@@ -4,12 +4,12 @@ import com.revature.daos.ExerciseDao;
 
 public class TestDriverFitness {
 
-	private static ExerciseDao justWork = ExerciseDao.currentImplementation;
+	//private static ExerciseDao justWork = ExerciseDao.currentImplementation;
 	
 	public static void main(String[] args) {
-		
+	Workout builderW = WorkoutFactory.	
 		// TODO Auto-generated method stub
-System.out.println(justWork.findAll());
+//System.out.println(justWork.filterForBeginnerLB());
 
 
 	}
