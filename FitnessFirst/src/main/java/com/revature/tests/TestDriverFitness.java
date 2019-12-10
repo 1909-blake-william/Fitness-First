@@ -1,15 +1,19 @@
 package com.revature.tests;
 
 import com.revature.daos.ExerciseDao;
+import com.revature.models.Exercise;
 
 public class TestDriverFitness {
 
-	//private static ExerciseDao justWork = ExerciseDao.currentImplementation;
 	
 	public static void main(String[] args) {
-	Workout builderW = WorkoutFactory.	
+//	Workout builderW = WorkoutFactory.	
 		// TODO Auto-generated method stub
-//System.out.println(justWork.filterForBeginnerLB());
+		ExerciseDao justWork = ExerciseDao.currentImplementation;
+		
+		//System.out.println(justWork.filterForBeginnerUB());
+		
+		System.out.println(justWork.filter1ForBeginnerLB());
 
 
 	}

@@ -1,33 +1,35 @@
 package com.revature.fbeans;
 
-import java.util.List;
 
-import com.revature.models.Exercise;
-import com.revature.models.Reps;
-import com.revature.models.Sets;
 
 public class BuilderWorkout implements Workout {
 
+
+
 	@Override
-	public List<Exercise> assignedExercise() {
-		//FIND A WAY TO FIND BY SQL INDEX
-		//MAKE SURE YOU CAN FILTER
-		// THEN USE RANDOM NUMBER TO PICK ONE
-		
+	public AssignedExercise a1() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Sets assignedSets() {
+	public AssignedExercise a2() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Reps assignedReps() {
+	public AssignedExercise a3() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-}
+	@Override
+	public AssignedExercise a4() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	}
+
+

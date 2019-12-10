@@ -24,5 +24,14 @@ public interface ExerciseDao {
 	List<Exercise> filterForAdvancedUB();
 	List<Exercise> filterForAdvancedLB();
 	
+	Exercise filter1ForBeginnerUB();
+	Exercise filter1ForBeginnerLB();
+	
+	Exercise filter1ForIntermediateUB();
+	Exercise filter1ForIntermediateLB();
+	
+	Exercise filter1ForAdvancedUB();
+	Exercise filter1ForAdvancedLB();
+	
 	
 }
