@@ -15,7 +15,7 @@ public interface UserDao {
 
 	User findById(int ersUserId);
 
-	User findByUsernameAndPassword(String username, String password);
+	boolean findByUsernameAndPassword(String username, String password);
 
 	User findByUsername(String username);
 }

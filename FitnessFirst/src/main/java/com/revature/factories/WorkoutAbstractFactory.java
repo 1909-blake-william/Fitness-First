@@ -2,7 +2,7 @@ package com.revature.factories;
 
 import com.revature.fbeans.Workout;
 
-public interface WorkoutAbstractFactory {
+public interface WorkoutAbstractFactory<T> {
 
-	 Workout createWorkout();
+	 Workout createWorkout(String userChoice);
 }

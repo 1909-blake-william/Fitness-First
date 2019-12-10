@@ -1,6 +1,7 @@
 package com.revature.models;
 
 public class User {
+	private static User instance = new User();
 	private int userId;
 	private String username;
 	private String userPassword;
@@ -14,14 +15,14 @@ public class User {
 	private int userLevel;
 	private int userPoints;
 	
-	public User() {
-		super();
-		// TODO Auto-generated constructor stub
+	private User() {}
+	
+	public static User getInstance() {
+		return instance;
 	}
 
-	public User(int userId, String username, String userPassword, String firstname, String lastname, String email,
+	public void setNewUser(int userId, String username, String userPassword, String firstname, String lastname, String email,
 			String gender, int height, int weight, String considerations, int userLevel, int userPoints) {
-		super();
 		this.userId = userId;
 		this.username = username;
 		this.userPassword = userPassword;
@@ -34,6 +35,21 @@ public class User {
 		this.considerations = considerations;
 		this.userLevel = userLevel;
 		this.userPoints = userPoints;
+	}
+	
+	public void setNoUser() {
+		this.userId = 0;
+		this.username = null;
+		this.userPassword = null;
+		this.firstname = null;
+		this.lastname = null;
+		this.email = null;
+		this.gender = null;
+		this.height = 0;
+		this.weight = 0;
+		this.considerations = null;
+		this.userLevel = 0;
+		this.userPoints = 0;
 	}
 
 	public int getUserId() {

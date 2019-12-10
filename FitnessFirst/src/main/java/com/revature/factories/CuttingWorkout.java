@@ -1,10 +1,9 @@
-package com.revature.fbeans;
+package com.revature.factories;
 
+import com.revature.fbeans.AssignedCuttingExercise;
+import com.revature.fbeans.Workout;
 
-
-public class BuilderWorkout implements Workout {
-
-
+public class CuttingWorkout implements Workout {
 
 	@Override
 	public AssignedCuttingExercise a1() {
@@ -30,6 +29,4 @@ public class BuilderWorkout implements Workout {
 		return null;
 	}
 
-	}
-
-
+}

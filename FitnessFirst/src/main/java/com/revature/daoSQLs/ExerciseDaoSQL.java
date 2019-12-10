@@ -264,27 +264,113 @@ public class ExerciseDaoSQL implements ExerciseDao {
 		}
 	}
 	@Override
-	public List<Exercise> filter1ForIntermediateUB() {
-		// TODO Auto-generated method stub
-		return null;
+	public Exercise filter1ForIntermediateUB() {
+		try (Connection c = ConnectionUtility.getConnection()) {
+
+			String sql = "SELECT * FROM" + "( SELECT * FROM exercise WHERE"
+					+ "(exercise_type = 4 OR exercise_type = 7 OR exercise_type = 6 OR exercise_type = 5 OR exercise_type = 3 AND muscle = 8)"
+					+ "OR (exercise_type = 4 OR exercise_type = 7 OR exercise_type = 6 OR exercise_type = 5 OR exercise_type = 3 AND muscle = 11)"
+					+ "OR (exercise_type = 4 OR exercise_type = 7 OR exercise_type = 6 OR exercise_type = 5 OR exercise_type = 3 AND muscle = 12)"
+					+ "OR (exercise_type = 4 OR exercise_type = 7 OR exercise_type = 6 OR exercise_type = 5 OR exercise_type = 3 AND muscle = 13)" + "ORDER BY dbms_random.value)"
+					+ "WHERE rownum = 1";
+
+			PreparedStatement ps = c.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			Exercise chosenExercise = new Exercise();
+			if (rs.next()) {
+				chosenExercise = (extractExercises(rs));
+			}
+
+			return chosenExercise;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
-	public List<Exercise> filter1ForIntermediateLB() {
-		// TODO Auto-generated method stub
-		return null;
+	public Exercise filter1ForIntermediateLB() {
+		try (Connection c = ConnectionUtility.getConnection()) {
+
+			String sql = "SELECT * FROM" + "( SELECT * FROM exercise WHERE"
+					+ "(exercise_type = 4 OR exercise_type = 7 OR exercise_type = 6 OR exercise_type = 5 OR exercise_type = 3 AND muscle = 9)"
+					+ "OR (exercise_type = 4 OR exercise_type = 7 OR exercise_type = 6 OR exercise_type = 5 OR exercise_type = 3 AND muscle = 14)"
+					+ "ORDER BY dbms_random.value)"
+					+ "WHERE rownum = 1";
+
+			PreparedStatement ps = c.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			Exercise chosenExercise = new Exercise();
+			if (rs.next()) {
+				chosenExercise = (extractExercises(rs));
+			}
+
+			return chosenExercise;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	@Override
-	public List<Exercise> filter1ForAdvancedUB() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public List<Exercise> filter1ForAdvancedLB() {
-		// TODO Auto-generated method stub
-		return null;
+	public Exercise filter1ForAdvancedUB() {
+		try (Connection c = ConnectionUtility.getConnection()) {
+
+			String sql = "SELECT * FROM" + "( SELECT * FROM exercise WHERE"
+					+ "(muscle = 8 OR muscle = 11 OR muscle 12 OR muscle 13)"
+					+ "ORDER BY dbms_random.value)"
+					+ "WHERE rownum = 1";
+
+			PreparedStatement ps = c.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			Exercise chosenExercise = new Exercise();
+			if (rs.next()) {
+				chosenExercise = (extractExercises(rs));
+			}
+
+			return chosenExercise;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
+
+
+	@Override
+	public Exercise filter1ForAdvancedLB() {
+		try (Connection c = ConnectionUtility.getConnection()) {
+
+			String sql = "SELECT * FROM" + "( SELECT * FROM exercise WHERE"
+					+ "(muscle = 9 OR muscle = 14)"
+					+ "ORDER BY dbms_random.value)"
+					+ "WHERE rownum = 1";
+
+			PreparedStatement ps = c.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			Exercise chosenExercise = new Exercise();
+			if (rs.next()) {
+				chosenExercise = (extractExercises(rs));
+			}
+
+			return chosenExercise;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 
 }
