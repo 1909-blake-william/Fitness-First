@@ -37,10 +37,10 @@ public class AuthServlet extends HttpServlet {
 			User credentials = (User) OmSingleton.read(req.getInputStream(), User.class);
 			System.out.println(credentials);
 
-			User loggedInUser = userDao.findByUsernameAndPassword(credentials.getUsername(),
+			boolean loggedInUser = userDao.findByUsernameAndPassword(credentials.getUsername(),
 					credentials.getUserPassword());
 
-			if (loggedInUser == null) {
+			if (loggedInUser == false) {
 				resp.setStatus(401); // Unauthorized status code
 				return;
 			} else {

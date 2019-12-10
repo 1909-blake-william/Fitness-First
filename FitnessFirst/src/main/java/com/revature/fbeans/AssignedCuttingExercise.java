@@ -7,7 +7,7 @@ import com.revature.models.ExerciseSets;
 import com.revature.models.Reps;
 import com.revature.models.User;
 
-public abstract class AssignedCuttingExercise {
+public class AssignedCuttingExercise {
 	ExerciseDao exerDao = ExerciseDao.currentImplementation;
 	UserDao userD = UserDao.currentImplementation;
 	private User user = User.getInstance();
@@ -46,5 +46,12 @@ public abstract class AssignedCuttingExercise {
 	int assignedReps() {
 
 		return exerRep.getCuttingReps();
+	}
+
+	@Override
+	public String toString() {
+		return "AssignedCuttingExercise [exerDao=" + exerDao + ", userD=" + userD + ", user=" + user + ", exerSet="
+				+ exerSet + ", exerRep=" + exerRep + ", filteredExercise()=" + filteredExercise() + ", assignedSets()="
+				+ assignedSets() + ", assignedReps()=" + assignedReps() + "]";
 	}
 }
