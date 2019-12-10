@@ -1,0 +1,1400 @@
+DROP USER fitness CASCADE;
+
+CREATE USER fitness
+IDENTIFIED BY fitness
+DEFAULT TABLESPACE users
+TEMPORARY TABLESPACE temp
+QUOTA 10M ON users;
+
+GRANT CONNECT TO fitness;
+GRANT RESOURCE TO fitness;
+GRANT CREATE SESSION TO fitness;
+GRANT CREATE TABLE TO fitness;
+GRANT CREATE VIEW TO fitness;
+
+conn fitness/fitness;
+
+/************************************
+Tables and sequences
+************************************/
+
+DROP TABLE Points;
+CREATE TABLE Points (
+    points_id INT PRIMARY KEY,
+    actual_points INT
+);
+DROP TABLE Muscle;
+CREATE TABLE Muscle (
+    muscle_id INT PRIMARY KEY,
+    muscle_name VARCHAR2(30)
+);
+DROP TABLE Exercise_Type;
+CREATE TABLE Exercise_Type (
+    exercise_type_id INT PRIMARY KEY,
+    exercis_type_name VARCHAR2 (40)
+);
+DROP TABLE User_level;
+CREATE TABLE User_level (
+    level_id INT PRIMARY KEY,
+    level_identifier INT
+);
+DROP TABLE Difficulty;
+CREATE TABLE Difficulty (
+    difficulty_id INT PRIMARY KEY,
+    difficulty_name VARCHAR2 (20),
+    difficulty_points NUMBER REFERENCES Points(points_id)
+);
+DROP SEQUENCE Exercise_id_seq;
+DROP TABLE Exercise;
+CREATE SEQUENCE Exercise_id_seq;
+CREATE TABLE Exercise (
+    exercise_id INT PRIMARY KEY,
+    exercise_name VARCHAR2(20) ,
+    muscle VARCHAR(40),
+    exercise_type INT REFERENCES Exercise_Type(exercise_type_id),
+    exercise_description VARCHAR2(250),
+    exercise_difficulty INT REFERENCES Difficulty(difficulty_id)
+);
+DROP SEQUENCE WGER_User_id_seq;
+DROP TABLE WGER_User;
+CREATE SEQUENCE WGER_User_id_seq;
+CREATE TABLE WGER_User (
+    user_id INT PRIMARY KEY,
+    username VARCHAR2 (20) UNIQUE NOT NULL,
+    user_password VARCHAR(50) NOT NULL,
+    firstname VARCHAR(20),
+    lastname VARCHAR(20),
+    email VARCHAR(30),
+    gender VARCHAR2(5),
+    height INT,
+    weight INT,
+    considerations VARCHAR2(250),
+    user_level INT REFERENCES User_level(level_id),
+    points INT REFERENCES Points(points_id)
+);
+DROP SEQUENCE Workout_id_seq;
+DROP TABLE Workout;
+CREATE SEQUENCE Workout_id_seq;  
+CREATE TABLE Workout (
+    workout_id INT PRIMARY KEY,
+    exercises INT REFERENCES Exercise(exercise_id),
+    exercise_sets INT,
+    repetitions INT,
+    workout_user INT REFERENCES Wger_User(user_id),
+    uses_weights NUMBER(1) DEFAULT 0 NOT NULL,
+    completed NUMBER(1) DEFAULT 0 NOT NULL
+);
+
+commit;
+____________________________________
+
+INSERT INTO "FITNESS"."MUSCLE" (MUSCLE_ID, MUSCLE_NAME) VALUES ('8', 'Arms')
+INSERT INTO "FITNESS"."MUSCLE" (MUSCLE_ID, MUSCLE_NAME) VALUES ('9', 'Legs')
+INSERT INTO "FITNESS"."MUSCLE" (MUSCLE_ID, MUSCLE_NAME) VALUES ('10', 'Abs')
+INSERT INTO "FITNESS"."MUSCLE" (MUSCLE_ID, MUSCLE_NAME) VALUES ('11', 'Chest')
+INSERT INTO "FITNESS"."MUSCLE" (MUSCLE_ID, MUSCLE_NAME) VALUES ('12', 'Back')
+INSERT INTO "FITNESS"."MUSCLE" (MUSCLE_ID, MUSCLE_NAME) VALUES ('13', 'Shoulders')
+INSERT INTO "FITNESS"."MUSCLE" (MUSCLE_ID, MUSCLE_NAME) VALUES ('14', 'Calves')
+
+Commit Successful
+
+
+INSERT INTO "FITNESS"."EXERCISE_TYPE" (EXERCISE_TYPE_ID, EXERCIS_TYPE_NAME) VALUES ('1', 'Barbell')
+INSERT INTO "FITNESS"."EXERCISE_TYPE" (EXERCISE_TYPE_ID, EXERCIS_TYPE_NAME) VALUES ('2', 'SZ-Bar')
+INSERT INTO "FITNESS"."EXERCISE_TYPE" (EXERCISE_TYPE_ID, EXERCIS_TYPE_NAME) VALUES ('3', 'Dumbbell')
+INSERT INTO "FITNESS"."EXERCISE_TYPE" (EXERCISE_TYPE_ID, EXERCIS_TYPE_NAME) VALUES ('4', 'Gym Mat')
+INSERT INTO "FITNESS"."EXERCISE_TYPE" (EXERCISE_TYPE_ID, EXERCIS_TYPE_NAME) VALUES ('5', 'Swiss Ball')
+INSERT INTO "FITNESS"."EXERCISE_TYPE" (EXERCISE_TYPE_ID, EXERCIS_TYPE_NAME) VALUES ('6', 'Pull-up Bar')
+INSERT INTO "FITNESS"."EXERCISE_TYPE" (EXERCISE_TYPE_ID, EXERCIS_TYPE_NAME) VALUES ('7', 'Bodyweight')
+INSERT INTO "FITNESS"."EXERCISE_TYPE" (EXERCISE_TYPE_ID, EXERCIS_TYPE_NAME) VALUES ('8', 'Flat Bench')
+INSERT INTO "FITNESS"."EXERCISE_TYPE" (EXERCISE_TYPE_ID, EXERCIS_TYPE_NAME) VALUES ('9', 'Incline Bench')
+INSERT INTO "FITNESS"."EXERCISE_TYPE" (EXERCISE_TYPE_ID, EXERCIS_TYPE_NAME) VALUES ('10', 'Kettlebell')
+
+Commit Successful
+
+
+INSERT INTO "FITNESS"."EXERCISE_TYPE" (EXERCISE_TYPE_ID, EXERCISE_TYPE_NAME) VALUES ('0', 'Other')
+
+
+
+
+
+
+
+____________________________________
+
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, '', '9', 0, 'This exercise entails anything involving soccer, including any exercises that are soccer-related.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, '', '10', 0, '5 minutes Set a time limit for however long you have to exercise. Complete as many reps as you can of your exercise of choice in that time, then work to do more reps the next time you repeat the routine.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, '', '8', 0, 'Dead lift with legs pulling weight off the ground'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, '', '10', 0, 'One does not accumulate but eliminate .  It is not daily increase but daily  decrease. The height of cultivation  always runs to simplicity.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, '', '14', 0, 'Dolor dolor quia molestiae accusantium libero et dolores voluptatem. Quis molestiae non quam tempora ab veritatis totam. Reprehenderit enim dolore aut ipsa repudiandae possimus aspernatur. Eligendi tempore beatae labore id aut. Dolorem iusto est odio.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, '', '10', 0, 'The plank is one of the most common core exercises, ever, but most guys get it wrong. Creating tension in your abs primes your body to maximally contract all of its muscles. "This is a very useful ability when sprinting, jumping, and lifting weights," Dunham says'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, '', '10', 0, 'Get onto all fours and prop yourself up on your forearms. "Turn your palms up toward the sky, keeping your thumbs on the ground, and form a straight line from your head to your heels," Dunham says. Squeeze your glutes and quads, which will draw your knees up and prevent sagging. "Brace your core as if you were expecting a kick to the stomach, and press your forearms into the ground," he adds. Once you feel everything tighten, squeeze even harder and take big, deliberate breaths as you plank. To increase the challenge, squeeze harder and exhale more air with each breath as you hold the position.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, '10 Min Abs', '10', 0, '1 Minute for each exercise
+
+Hold feet 6 inches off ground
+Crunches
+Side Crunches (L)
+Side Crunches (R)
+Heel Touches
+Plank Crunch
+Scissor Kicks
+Swim Kicks
+V Crunches
+Hold feet 6 in off ground
+
+Exercises can be substituted to vary workout'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, '2 Handed Kettlebell Swing', '10', '10', 'Two Handed Russian Style Kettlebell swing'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, '52', '13', 0, 'With a deck of cards, pick a card and do push ups relating to the number value on the card. For example if a Jack of Hearts is picked, do 10 pushups.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Aalex Gambe Alte al Muro', '9', 0, '
+60 secondi per ogni stazione, ripetere tutto 2 volte
+1. gambe alte ferme, cercando di portare i glutei più vicino possibile al muro
+2. portare la gamba destra "ad ore 3", quanto più largo possibile; la gamba sinistra è ferma in alto
+3. portare la gamba sinistra "ad ore 9", quanto più largo possibile; la gamba destra è ferma in alto
+4. partendo da posizione base, allargare entrabe le gambe il più possibile (per raggiungere le "10 e 10")
+5. gambe piegate a rana e piedi appoggiati al muro (il lato destro del piede destro, per capirci, tocca il muro, viceversa per il sinistro): spingere con le mani in zona ginocchia verso il muro per avvicinarle'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Abcd', '10', 0, 'After you submit the form, the administrators will be notified. Once it is reviewed, it will be added to the database. Till this happens, it will not be visible in the overview or the search. In case you added your email when you registered, you will get notified when the process is completed successfully.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Ankle Taps', '10', '7', 'Engage abs, then alternate between tapping your left and right ankle by reaching either side with your arm extended.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Arch Hold', '10', 0, 'Opposite of hollow hold. Lie on stomach with arms and legs extended.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Arms', '8', '1', 'Arms exercise sdfg asdg asf sdfg sdfg sdfgsdf gsdf g sgsdf gsdfg sdfg alk fl;asdf ;ansd;kf na;klsdnfla nsd l;knalksdf adsfadsf a'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Arms', '8', '8', 'Arms exercise sdfg asdg asf sdfg sdfg sdfgsdf gsdf g sgsdf gsdfg sdfg alk fl;asdf ;ansd;kf na;klsdnfla nsd l;knalksdf adsfadsf a'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Arms', '8', '4', 'Arms exercise sdfg asdg asf sdfg sdfg sdfgsdf gsdf g sgsdf gsdfg sdfg alk fl;asdf ;ansd;kf na;klsdnfla nsd l;knalksdf adsfadsf a'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Arnold Shoulder Press', '13', '3', 'Very common shoulder exercise.
+ 
+As shown here: https://www.youtube.com/watch?v=vj2w851ZHRM'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Awesome', '10', 0, 'This is one of the best stuff around here , y'all shouold come and taste or even test it, just aesome '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Awesome', '10', 0, 'This is one of the best stuff around here , y'all shouold come and taste or even test it, just aesome '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Awesome', '10', '8', 'This is one awesome exercise for working out your muscle , you probably want to try this most of the time'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Awesome', '10', '4', 'This is one awesome exercise for working out your muscle , you probably want to try this most of the time'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Axe Hold', '8', '3', 'Grab dumbbells and extend arms to side and hold as long as you can'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Cable Pushdown (with Rope Attachment)', '8', 0, '
+Face high pulley and grasp rope attachment with clinched hands side by side (palms in). Position elbows to side.
+
+
+Extend arms down. Turn palms down at bottom. Return until forearm is close to upper arm and hands are in original position. Repeat.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Cable Shrug', '13', 0, 'Standard shoulder shrug using the cable system.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Cable Woodchoppers', '10', 0, 'Set cable pulley slightly lower than chest height. Keep body facing forward with hips stable.  Grab the pulley handle, fully extend your arms and bring your arms forward and across your body. Hold for 1 second at the end of the movement and slowly return to starting position.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Calf Press Using Leg Press Machine', '14', 0, 'Put  the balls of your feet on an extended leg press pad.  Use your calves to press the weight by flexing your feet/toes into a pointed position, and releasing back into a relaxed position.
+This exercise builds mass and strength in the Gastrocnemius and Soleus muscles as well, if not better, than any calf exercise.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Calf Raises on Hackenschmitt Machine', '14', 0, 'Place yourself on the machine with your back firmly against the backrest, the feet are on the platform for calf raises. Check that the feet are half free and that you can completely stretch the calf muscles down.
+With straight knees pull up your weight as much as you can. Go with a fluid movement down till the calves are completely stretched. Repeat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Car Push', '14', 0, 'Place car in neutral (with partner to apply breaks if necessary) and drive with legs to push car'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Chair Steps', '9', 0, '1. Stand facing a chair
+2. Step up onto the chair
+3. Step off the chair4. Repeat
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Cherry Pickers', '8', '7', 'https://www.youtube.com/watch?v=P5SKBRXAR1Q'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Chin-ups', '12', '6', 'Like pull-ups but with a reverse grip'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Chin Ups', '12', 0, 'Pull up'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Circuit - Pullups, Pushups, Crunches, Air Squats', '9', 0, 'Circuit of the 4 exercises
+
+Pullups x 20 (assisted if needed)
+Pushups x 30
+Crunches x 40
+Air Squats x 50
+
+Repeat entire circuit 5 times with a 3 min break in between each set'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Close-grip Bench Press', '8', '1', 'Perform a typical bench press, but hold the bar with your hands approximately shoulder-width apart and keep your elbows close to your body.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Close-grip Bench Press', '8', '8', 'Perform a typical bench press, but hold the bar with your hands approximately shoulder-width apart and keep your elbows close to your body.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Close-grip Lat Pull Down', '12', 0, 'Grip the pull-down bar with your hands closer than shoulder width apart, with your palms facing away from you. Lean back slightly. Pull the bar down towards your chest, keeping your elbows close to your sides as you come down. Pull your shoulders back at the end of the motion.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Controlled Bench', '11', 0, 'block/spacer betweet the chest and barbel when going down.  touch block and exploed up.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Cross-Bench Dumbbell Pullovers', '11', 0, 'Grasp a moderately weighted dumbbell so your palms are flat against the underside of the top plates and your thumbs are around the bar. Lie on your back across a flat bench so only your upper back and shoulders are in contact with the bench. Your feet should be set about shoulder-width apart and your head should hang slightly downward. With the dumbbell supported at arm''s length directly about your chest, bend your arms about 15 degrees and keep them bent throughout the movement. Slowly lower the dumbbell backward and downward in a semicircle arc to as low a position as is comfortably possible. Raise it slowly back along the same arc to the starting point, and repeat for the required number of repetitions.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Crunch', '10', 0, 'This is performed while lying face up on the floor with knees bent, by curling the shoulders up towards the pelvis. This is an isolation exercise for the abdominals.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Crunches', '10', '8', 'Lay down on your back a soft surface, the feet are on the floor. Ask a partner or use some other help (barbell, etc.) to keep them fixed, your hands are behind your head. From this position move your upper body up till your head or elbows touch your knees. Do this movement by rolling up your back.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Crunches', '10', '4', 'Lay down on your back a soft surface, the feet are on the floor. Ask a partner or use some other help (barbell, etc.) to keep them fixed, your hands are behind your head. From this position move your upper body up till your head or elbows touch your knees. Do this movement by rolling up your back.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Crunches on Machine', '10', 0, 'The procedure is very similar as for regular crunches, only with the additional weight of the machine. Sit on the machine, put both feet firmly on the ground. Grab the to the weights, cables, etc. and do a rolling motion forwards (the spine should ideally lose touch vertebra by vertebra). Slowly return to the starting position. '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Crunches With Cable', '10', 0, 'Take the cable on your hands and hold it next to your temples. Knee down and hold your upper body straight and bend forward. Go down with a fast movement, rolling your back in (your ellbows point to your knees). Once down, go slowly back to the initial position.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Crunches With Legs Up', '10', 0, 'On your back, legs extended straight up, reach toward your toes with your hands and lift your shoulder blades off the ground and back.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Pull Ups on Machine', '12', 0, ''); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Push Press', '13', 0, 'olympic weight lifting'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Push Ups', '8', '7', 'Start with your body streched, your hands are shoulder-wide appart on the ground. Push yourself off the ground till you strech your arms. The back is always straight and as well as the neck (always look to the ground). Lower yourself to the initial position and repeat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Rack Deadlift', '12', 0, 'Deadlift to be done using a Smith machine or a free rack. Bar or barbell hould be just right under the knee cap level. Lift using the glutes and through the heels, then come back to starting postion with a control movement of 2 seconds.
+This exercise targets mainly the lower back and glutes.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Razboj', '11', 0, 'Razboj'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Rear Delt Raises', '13', '3', 'Seated on a bench bWith the dumbbells on the floor bend over at 45 Degrees and then slowly raise each dumbbell to shoulder height and hold for a couple seconds before lowering to the starting position. 
+ '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Rear Delt Rope Pull', '13', 0, 'Preparation
+ 
+
+Stand facing rope attachment on high pulley cable. Grasp each end of rope just above enlarged ends. Step back with one foot so arms and shoulders are positioned straight forward with cable taut. Point elbows outward.
+
+ 
+Execution
+ 
+
+Pull rope to upper chest or neck, keeping elbows at shoulder height until elbows travel slightly behind back. Keep upper arms perpendicular to trunk. Return until arms are extended forward. Repeat.
+
+Target
+             Posterior Deltoid'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Renegade Row', '12', '3', 'Get into pushup position gripping some dumbbells. Perform one pushup, then drive your left elbo up, bringing the dumbell up to your body. Return the dumbell to starting position. 
+Perform another pushup and then row with the other arm to complete one rep.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Reverse Bar Curl', '8', '2', 'Hold bar with reverse (or "overhand") grip, palms facing the floor.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Reverse Crunch', '10', '7', '1. Lie on your back with your knees together and your legs bent to 90 degrees, feet planted on the floor. Place your palms face down on the floor for support.
+2.Tighten your abs to lift your hips off the floor as you crunch your knees inward to your chest. Pause at the top for a moment, then lower back down without allowing your lower back to arch and lose contact with the floor.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Reverse Dumbbell Flyes', '13', '3', 'Works posterior deltoid muscle group does not appear in muscle list. Start with lower weight.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Reverse Grip Bench Press', '11', '1', 'Upper chest focuses exercise that also works triceps'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Reverse Grip Bench Press', '11', '8', 'Upper chest focuses exercise that also works triceps'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Reverse Plank', '10', 0, 'Plank with stomach towards ceiling'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Ring Dips', '8', 0, 'Dips peformed on gymnastic rings.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Roman Chair', '10', 0, 'Crunches on roman chair'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Roman Chair Crunch', '10', 0, 'Use Hyperextension chair.  Sit on chair, arms crossed on over your chest. then situp slowly and back'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Romanian Deadlift', '9', '1', 'DL from top to pos 2: https://www.youtube.com/watch?v=WtWtjViRsKo'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Rowing', '9', 0, 'To use a rowing machine
+1. Wrap fingers lightly around the handle and keep wrists straight.
+2. extend arms in front of you, keeping shoulders relaxed—no hunching!
+3. hinge forward from the hips and bend knees until they’re over ankles 
+4. push through feet, extend legs, and lean back slightly; keep shoulders relaxed.
+5. draw elbows straight back to sides until hands reach ribs.
+6. to start the next stroke, extend arms, and then bend knees to slide the seat forward.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Rowing, Lying on Bench', '12', 0, ''); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Rowing Machine', '10', 0, 'Use rowing machine, trying to keep a steady speed'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Triceps Dips', '8', 0, 'lift on parallel bars hold for 1 second, and lower slowly and control for 4 seconds, then come back with no rest (tempo: 4010)'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Triceps Extensions on Cable', '8', 0, 'Grab the cable, stand with your feet shoulder wide, keep your back straight and lean forward a little. Push the bar down, making sure the elbows don''s move during the exercise. Rotate your hands outwards at the very end and go back to the initial position without pause.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Triceps Extensions on Cable With Bar', '8', 0, 'Grab the bar, stand with your feet shoulder wide, keep your back straight and lean forward a little. Push the bar down, making sure the elbows don''s move during the exercise. Without pause go back to the initial position.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Triceps Machine', '8', 0, '.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Triceps Press Down', '8', 0, 'Triangular Bar pressdown on cable tower'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Triceps Pushdown V-shape Bar', '8', '1', 'Standing triceps pushdown vertical (not extension) with a V-shaped bar'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Trunk Rotation With Cable ', '10', 0, 'Seated trunk rotation with cable '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Turkish Get-Up', '10', '3', 'Starting on back, move to the standing position with dumbbell in one hand.  Switch hands between reps.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Underhand Lat Pull Down', '12', 0, 'Grip the pull-down bar with your palms facing you and your hands closer than shoulder-width apart. Lean back slightly and keep your back straight. Pull the bar down towards your chest, pulling your shoulders back slightly at the end of the motion.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Upper Body', '11', '1', 'Full workout of the upper arms body n chest. Focusing on the core'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Upper Body', '11', '8', 'Full workout of the upper arms body n chest. Focusing on the core'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Upper Body', '11', '3', 'Full workout of the upper arms body n chest. Focusing on the core'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Upper Body', '11', '4', 'Full workout of the upper arms body n chest. Focusing on the core'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Upper Body', '11', '9', 'Full workout of the upper arms body n chest. Focusing on the core'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Upper Body', '11', '7', 'Full workout of the upper arms body n chest. Focusing on the core'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Upper External Oblique', '11', '6', 'Exercise for upper external oblique muscles'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Upright Row', '13', '1', 'Grasp bar with shoulder width or slightly narrower overhand grip.
+Pull the bar to neck with elbows leading. Allow wrists to flex as bar rises.
+Lower and repeat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Upright Row, on Multi Press', '13', 0, 'The movements are basically the same as with an SZ-bar, but you use the bar on the multi press:
+Stand straight, your feet are shoulder-width apart. Hold the bar with an overhand grip on your thighs, the arms are stretched. Lift the bar close to the body till your chin. The elbows point out so that at the highest point they form a V. Make here a short pause before going slowly down and repeating the movement.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Upright Row, Smith Machine', '13', 0, '
+Select the desired weight and load it onto a barbell.
+Unrack the bar by rotating the safety latches off the j-hooks.
+Inhale, brace your abs, and then lead the movement by driving the elbows high as you pull the bar to chest height.
+When the bar has reached its peak, reverse the movement slowly while controlling the bar back to the starting position.
+Repeat for the desired number of repetitions.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Upright Row, SZ-bar', '13', '2', 'Stand straight, your feet are shoulder-width apart. Hold the SZ-bar with an overhand grip on your thighs, the arms are stretched. Lift the bar close to the body till your chin. The elbows point out so that at the highest point they form a V. Make here a short pause before going slowly down and repeating the movement.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Upright Row w/ Dumbbells', '13', '3', 'Feet apart at shoulder width. Nice and Slow!'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'V-Bar Pulldown', '12', 0, 'Pulldowns using close grip v-bar.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Vertical Pull', '12', 0, 'Vertical Pull from Convict Conditioning'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Walking', '9', 0, 'Walking, distance and time. Should allow a range of inputs (running, etc)'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Wall Handstand', '13', '7', 'Handstand against a wall for support (chest facing wall).'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Back, Shoulder, And Leg Stretching.', '12', '4', 'Perform eveyday.  90 minute wokout.  '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Back Squat', '8', 0, 'Place a barbell in a rack just below shoulder-height. Dip under the bar to put it behind the neck across the top of the back, and grip the bar with the hands wider than shoulder-width apart. Lift the chest up and squeeze the shoulder blades together to keep the straight back throughout the entire movement. Stand up to bring the bar off the rack and step backwards, then place the feet so that they are a little wider than shoulder-width apart. Sit back into hips and keep the back straight and the chest up, squatting down so the hips are below the knees. From the bottom of the squat, press feet into the ground and push hips forward to return to the top of the standing position.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Barbell Ab Rollout', '10', '1', 'Place a barbell on the floor at your feet.
+Bending at the waist, grip the barbell with a shoulder with overhand grip.
+With a slow controlled motion, roll the bar out so that your back is straight.
+Roll back up raising your hips and butt as you return to the starting position.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Barbell Bench Press', '8', 0, 'Bench pressing heavy things using heavy objects'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Barbell Hack Squats', '9', '1', 'Perform leg squats with barbell behind your legs'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Barbell Hip Thrust', '9', '1', 'Preparation
+ 
+
+Sit on floor with long side of bench behind back. Roll barbell back and center over hips. Position upper back on corner of bench. Place feet on floor approximately shoulder width with knees bent. Grasp bar to each side.
+
+ 
+Execution
+ 
+
+Raise bar upward by extending hips until straight. Lower and repeat.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Barbell Hip Thrust', '9', '1', '
+With a loaded barbell on the long side of the bench, sit on the floor so your legs are straight, and roll the barbell over your legs up to your hip crease. Make sure your back is against the bench. 
+Then, grab the barbell and plant your feet flat on the floor.
+Thrust your hips up so the bar is on your hip crease and lean your upper back onto the bench.
+Now, lower your butt down to a few inches from the floor.
+Then, thrust your hips back up while squeezing your glutes.
+Complete the preferred number of reps.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Barbell Lunges', '9', '1', 'Put barbell on the back of your shoulders. Stand upright, then take the first step forward. Step should bring you forward so that your supporting legs knee can touch the floor. Then stand back up and repeat with the other leg.
+Remember to keep good posture.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Barbell Reverse Lunge - Clean Grip', '9', '1', 'You start standing with the bar held in front of you, resting on your deltoids/clavicle and lightly pressing the neck. Take a step back with one leg and lunge. (Don''s let your knee touch the ground; this usually is quite bad for your knee and will cause pain later. ) Squeeze the glutes and quads as you press upward from the toes back to a standing position with both legs side by side. Repeat on other side.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Barbell Squat', '8', '3', 'This is the beset way to do a squat. Just do it and you are good to go'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Barbell Triceps Extension', '8', '1', 'Position barbell overhead with narrow overhand grip.
+Lower forearm behind upper arm with elbows remaining overhead. Extend forearm overhead. Lower and repeat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Barbell Wrist Curls', '8', '1', 'With forearms horizontal and stationary, palms up, curl wrists up then return to down position, repeat'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Basic Crunch', '10', 0, 'Basic crunch: To do a crunch, start by lying on the floor with your knees bent and your feet flat on the ground. Then, cross your arms over your chest. When you're ready, lift your shoulders off the mat while contracting your abs and exhaling. Hold this pose for 1-2 seconds, then inhale and slowly lower back down.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Basic Crunch', '10', 0, 'Basic crunch: To do a crunch, start by lying on the floor with your knees bent and your feet flat on the ground. Then, cross your arms over your chest. When you're ready, lift your shoulders off the mat while contracting your abs and exhaling. Hold this pose for 1-2 seconds, then inhale and slowly lower back down.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bdeadlift', '12', 0, 'Why it''s on the list: This is technically more than a back exercise—it hits the entire posterior chain from your calves to your upper traps—but it''s the absolute best for overall backside development. Technique is uber-important with the deadlift, but once you nail it, you can progress to lifting monster weights that will recruit maximum muscle, release muscle-building hormones, and help you get big.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bear Walk', '11', '7', 'Rest your weight on your palms and the balls of your feet, not dissimilar to normal pushup position
+Move by stepping with your R palm and L foot, then your L palm and R foot.  Basically, walk like a lumbering bear.
+Move as fast as you can.  Measure your reps/sets in either distance (i.e. 40 yards) or time (i.e. 45 seconds)
+Works your Pecs, Deltoids, Triceps, Traps, Lats, Abs and Lower Back, Hip Flexors, Quads, Glutes and Calves'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bear Walk', '11', 0, 'Rest your weight on your palms and the balls of your feet, not dissimilar to normal pushup position
+Move by stepping with your R palm and L foot, then your L palm and R foot.  Basically, walk like a lumbering bear.
+Move as fast as you can.  Measure your reps/sets in either distance (i.e. 40 yards) or time (i.e. 45 seconds)
+Works your Pecs, Deltoids, Triceps, Traps, Lats, Abs and Lower Back, Hip Flexors, Quads, Glutes and Calves'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'BenchPress', '11', '8', 'lift stuff bro and keep going and keep going and keep going and keep going'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bench Press', '11', '1', 'Lay down on a bench, the bar should be directly above your eyes, the knees are somewhat angled and the feet are firmly on the floor. Concentrate, breath deeply and grab the bar more than shoulder wide. Bring it slowly down till it briefly touches your chest at the height of your nipples. Push the bar up.
+If you train with a high weight it is advisable to have a spotter that can help you up if you can''t lift the weight on your own.
+With the width of the grip you can also control which part of the chest is trained more:
+
+wide grip: outer chest muscles
+narrow grip: inner chest muscles and triceps
+'); 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bench Press', '11', '8', 'Lay down on a bench, the bar should be directly above your eyes, the knees are somewhat angled and the feet are firmly on the floor. Concentrate, breath deeply and grab the bar more than shoulder wide. Bring it slowly down till it briefly touches your chest at the height of your nipples. Push the bar up.
+If you train with a high weight it is advisable to have a spotter that can help you up if you can''t lift the weight on your own.
+With the width of the grip you can also control which part of the chest is trained more:
+
+wide grip: outer chest muscles
+narrow grip: inner chest muscles and triceps
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Benchpress Dumbbells', '11', '8', 'The movement is very similar to benchpressing with a barbell, however, the weight is brought down to the chest at a lower point.
+Hold two dumbbells and lay down on a bench. Hold the weights next to the chest, at the height of your nipples and press them up till the arms are stretched. Let the weight slowly and controlled down.'); 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Benchpress Dumbbells', '11', '3', 'The movement is very similar to benchpressing with a barbell, however, the weight is brought down to the chest at a lower point.
+Hold two dumbbells and lay down on a bench. Hold the weights next to the chest, at the height of your nipples and press them up till the arms are stretched. Let the weight slowly and controlled down.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Leg Press on Hackenschmidt Machine', '9', 0, ''); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Leg Raises, Lying', '10', '4', 'Lay down on a bench and hold onto the recliner with your hands to keep you stable. Hold your legs straight and lift them till they make an angle of about 45°. Make a short pause of 1 sec. and go slowly down to the initial position. To increase the intensity you can make a longer pause of 7 sec. every 5th time.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Leg Raises, Standing', '10', 0, 'Put your forearms on the pads on the leg raise machine, the body is hanging freely. Lift now your legs with a fast movement as high as you can, make a short pause of 1sec at the top, and bring them down again. Make sure that during the exercise your body does not swing, only the legs should move.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Leverage Machine Chest Press', '11', 0, 'Be sure to adjust seat height so that the handles are towards the bottom of your pectorals.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Leverage Machine Iso Row', '12', 0, 'Adjust seat height so that the handles are at the bottom of your pectorals or just below.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'L Hold', '10', 0, 'Hold the L position for as long as possible'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'LifeFitness Calf Extension Machine', '14', 0, 'Seated calf extension machine by LifeFitness'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Lift', '8', 0, 'Arm exercise. Equipment required.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Lift', '8', 0, 'Arm exercise. Equipment required'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Lifts', '8', 0, 'Arm exercise. Equipment required. Eg Dumbbells'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Limbert', '11', 0, 'Lay down on a bench, the bar should be directly above your eyes, the knees are somewhat angled and the feet are firmly on the floor. Concentrate, breath deeply and grab the bar more than shoulder wide. Bring it slowly down till it briefly touches your chest at the height of your nipples. Push the bar up.
+If you train with a high weight it is advisable to have a spotter that can help you up if you can''t lift the weight on your own.
+With the width of the grip you can also control which part of the chest is trained more:
+
+wide grip: outer chest muscles
+narrow grip: inner chest muscles and triceps
+Don''s stretch your arms completly
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Long-Pulley (low Row)', '12', 0, 'Sit down, put your feet on the supporting points and grab the bar with a wide grip. Pull the weight with a rapid movement towards your belly button, not upper. Keep your arms and elbows during the movement close to your body. Your shoulders are pulled together. Let the weight slowly down till your arms are completely stretched.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Long-Pulley, Narrow', '12', 0, 'The exercise is the same as the regular long pulley, but with a narrow grip:
+Sit down, put your feet on the supporting points and grab the bar with a wide grip. Pull the weight with a rapid movement towards your belly button, not upper. Keep your arms and elbows during the movement close to your body. Your shoulders are pulled together. Let the weight slowly down till your arms are completely stretched.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Low Box Squat - Wide Stance', '9', '1', 'Unrack the bar and set your stance wide, beyond your hips.  Push your hips back and sit down to a box that takes you below parallel.  Sit completely down, do not touch and go.  Then explosively stand up.  Stay tight in your upper back and torso throughout the movement.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Low Row Machine', '12', 0, 'Specific product for building strength in the trunk and latissimus dorsi muscles. The exercise involves pulling the two independent levers towards the chest, keeping the arms out in front and the elbows low, parallel to the shoulders. Resistance is provided by a weight stack which enables the workload to be adjusted to suit each type of user. http://www.technogym.com/gb/products/strength-training-equipment/core-exercise-equipment/selection/low-row/427 Muscels: Rhomboid'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'L-sit', '10', '7', 'With the palms of your hands pointed forward set shoulder-width apart, push your body off the ground, locking your elbows as if you’re at the top of a dip exercise. Make sure to keep your shoulders down as you lock your knees and hold your legs together tightly, forming a 90-degree angle with your torso. Your legs should be parallel to the ground. hold for time.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'L-sit (full)', '10', 0, 'https://www.youtube.com/watch?v=IUZJoSP66HI'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'L-sit (tucked)', '10', 0, 'https://www.youtube.com/watch?v=IUZJoSP66HI'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Lunges', '9', '10', 'Challenging your balance is an essential part of a well-rounded exercise routine. Lunges do just that, promoting functional movement, while also increasing strength in your legs and glutes.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Lying Rotator Cuff Exercise', '13', '3', 'This is an excercise for problems with the levator muscles. Primary  Infraspinatus, secondary Teres Minor.
+Lying on side. Keep elbow on waist and in 90 dgr angle. Rotate towards stomach. Add weight as fit.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bench Press Narrow Grip', '8', '1', 'Lay down on a bench, the bar is directly over your eyes, the knees form a slight angle and the feet are firmly on the ground. Hold the bar with a narrow grip (around 20cm.). Lead the weight slowly down till the arms are parallel to the floor (elbow: right angle), press then the bar up. When bringing the bar down, don''s let it down on your nipples as with the regular bench pressing, but somewhat lower.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bench Press Narrow Grip', '8', '8', 'Lay down on a bench, the bar is directly over your eyes, the knees form a slight angle and the feet are firmly on the ground. Hold the bar with a narrow grip (around 20cm.). Lead the weight slowly down till the arms are parallel to the floor (elbow: right angle), press then the bar up. When bringing the bar down, don''s let it down on your nipples as with the regular bench pressing, but somewhat lower.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bendž', '11', 0, 'Klupa'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bent High Pulls', '13', '3', 'Bend over slightly while holding two dumbbells.  Pull the dumbbells up to your chest, keeping your elbows as high as you can.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bent Over Barbell Row', '12', '1', '
+Holding a barbell with a pronated grip (palms facing down), bend your knees slightly and bring your torso forward, by bending at the waist, while keeping the back straight until it is almost parallel to the floor. Tip: Make sure that you keep the head up. The barbell should hang directly in front of you as your arms hang perpendicular to the floor and your torso. This is your starting position.
+Now, while keeping the torso stationary, breathe out and lift the barbell to you. Keep the elbows close to the body and only use the forearms to hold the weight. At the top contracted position, squeeze the back muscles and hold for a brief pause.
+Then inhale and slowly lower the barbell back to the starting position.
+Repeat for the recommended amount of repetitions.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bentover Dumbbell Rows', '12', '3', 'With dumbbells in hand, bend at the hip until hands hang just below the knees (similar to straight-legged-deadlift starting position). Keep upper body angle constant while contracting your lats to pull you ellbows back pinching the shoulder blades at the top. Try not to stand up with every rep, check hands go below knees on every rep.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bent-over Lateral Raises', '13', '8', 'Sit on bench while holding weights. Bend forward as far as possible, with arms slightly bent at the elbow. Perform a lateral raise while maintaining the bend in your elbow.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bent-over Lateral Raises', '13', '3', 'Sit on bench while holding weights. Bend forward as far as possible, with arms slightly bent at the elbow. Perform a lateral raise while maintaining the bend in your elbow.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bent Over Rowing', '12', '1', 'Grab the barbell with a wide grip (slightly more than shoulder wide) and lean forward. Your upper body is not quite parallel to the floor, but forms a slight angle. The chest''s out during the whole exercise.
+Pull now the barbell with a fast movement towards your belly button, not further up. Go slowly down to the initial position. Don''s swing with your body and keep your arms next to your body.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bent Over Rowing Reverse', '12', '1', 'The same as regular rowing, but holding a reversed grip (your palms pointing forwards):
+Grab the barbell with a wide grIp (slightly more than shoulder wide) and lean forward. Your upper body is not quite parallel to the floor, but forms a slight angle. The chest''s out during the whole exercise.
+Pull now the barbell with a fast movement towards your belly button, not further up. Go slowly down to the initial position. Don''s swing with your body and keep your arms next to your body.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bicep', '13', '3', 'A user is doing bicep., He is doing it with dumbbell, It can be done by standing or sitting  '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bicep Curl Dumbell (Prise Hammer)', '8', 0, 'Prendre les dumbells en prise neutre ou hammer et les soulevers au niveau des épaules redescendre doucement. Tempo 1-3-1'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bicep Curls', '8', 0, 'Bicep Curls to max use you bicep to curl weight'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Biceps', '8', 0, 'While you rate this No. 1, we give it mixed reviews. The incline bench position increases the stretch on the long head of the biceps, while the neutral grip increases emphasis on the brachioradialis and brachialis. But the "hammer" takes some of the tension away from the long head, negating the benefit you gain from sitting at an incline.  Test this yourself by simply placing your right hand on your left biceps. Move your left hand from palm up to palm sideways and you can feel the tension change in your biceps.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Biceps Curls With Barbell', '8', '1', 'Hold the Barbell shoulder-wide, the back is straight, the shoulders slightly back, the arms are streched. Bend the arms, bringing the weight up, with a fast movement. Without pausing, let down the bar with a slow and controlled movement.
+Don''s allow your body to swing during the exercise, all work is done by the biceps, which are the only mucles that should move (pay attention to the elbows).'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Biceps Curls With Dumbbell', '8', '3', 'Hold two barbells, the arms are streched, the hands are on your side, the palms face inwards. Bend the arms and bring the weight with a fast movement up. At the same time, rotate your arms by 90 degrees at the very beginning of the movement. At the highest point, rotate a little the weights further outwards. Without a pause, bring them down, slowly.
+Don''s allow your body to swing during the exercise, all work is done by the biceps, which are the only mucles that should move (pay attention to the elbows).'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Biceps Curls With Dumbbell', '8', '3', 'Hold two barbells, the arms are streched, the hands are on your side, the palms face inwards. Bend the arms and bring the weight with a fast movement up. At the same time, rotate your arms by 90 degrees at the very beginning of the movement. At the highest point, rotate a little the weights further outwards. Without a pause, bring them down, slowly.
+Don''s allow your body to swing during the exercise, all work is done by the biceps, which are the only mucles that should move (pay attention to the elbows).'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Biceps Curls With SZ-bar', '8', '2', 'Hold the SZ-bar shoulder-wide, the back is straight, the shoulders slightly back, the arms are streched. Bend the arms, bringing the weight up, with a fast movement. Without pausing, let down the bar with a slow and controlled movement.
+Don''s allow your body to swing during the exercise, all work is done by the biceps, which are the only mucles that should move (pay attention to the elbows).'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Biceps Curl With Cable', '8', 0, 'Stand around 30 - 40cm away from the cable, the feet are firmly on the floor. Take the bar and lift the weight with a fast movements. Lower the weight as with the dumbbell curls slowly and controlled.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bigmarms', '8', '3', 'ah system she he dhdhdnsjdndndnd dhdhdnsjdndndnd dude dhdhdnsjdndndnd xhdn'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bike Ride', '9', '10', 'bike adjasjaf; afahf a;ifh a'f afjha f/af af ha'fauf af afaifa faf'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Biking', '9', 0, 'Biking'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Biking', '9', 0, 'Biking'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Billexercise', '9', '3', 'jsndfjndf fiefniewfew iefwejfkwef ijwenfkwejfne kjwenfkwejfnw ejfnkwejfbnkwe'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bird Dog', '10', '1', ' 
+ 
+This is a great exercise for patients who DON’T suffer from lumbar disc injuries…  this exercise is great when you are looking to strengthen the low back.   
+ 
+Get on all fours, knees behind the hips.  Engager the Kegel muscles (the muscles you use to stop peeing) and raise your opposite arm and leg, while maintaining the contraction of the Kegel muscles.  If at any time you cannot maintain the muscle contraction, begin over.   Perform this exercise for at least 10 times per side, increasing the number as you get stronger.  
+ 
+ '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bird Dog', '10', '1', ' 
+Kneel on floor with your hands placed about shoulder width apart.
+ 
+Point one arm out straight in front and extend the opposite leg to the rear. The shoulders and the hips should be parallel.
+ 
+Hold for 10 seconds and return to ground position.
+ 
+Start with 5 reps on alternate hands and knees, 10  in total. Add up to 3 sets of 10.
+ 
+As a variation, you can do several bird dogs with one side and then do a set with just the other side.
+ 
+Keep the abs engaged while you change sides. Work to minimize any extra motion during the weight shift.
+ '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Body Squats', '9', 0, '6 Second Reps Max 15 Reps
+6 Second Reps Max 15 Reps'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Body-Ups', '8', '7', '
+Assume a plank position on the ground. You should be supporting your bodyweight on your toes and forearms, keeping your torso straight. Your forearms should be shoulder-width apart. This will be your starting position.
+Pressing your palms firmly into the ground, extend through the elbows to raise your body from the ground. Keep your torso rigid as you perform the movement.
+Slowly lower your forearms back to the ground by allowing the elbows to flex.
+Repeat as needed.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bodyweight Squats', '9', '7', ' 
+Bodyweight Squats are a simple exercise that requires no equipment what soever (Though there are variants that add weights).
+Setup by standing up straight and placing your feet slightly further then shoulder width apart with your feet pointing slightly outwards. Hold your arms straight out infront.
+'squat' down leading with your hips as if you are going to sit down on a chair, untill your hip is parallel with or lower then your knees. While doing this you should keep your back straight and your body weight should be towards the back of your feet. Your knees shouldn''s should end up behind your toes. If they are in front of them you are not leading the squat with your hips and will have the wrong posture.
+Stand back up and repeat as necessary.Holding your arms straight out in front of you will help you keep the correct posture through out the exercise. it''s also helpful in maintaining posture to choose a point on the wall to focus on.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Boulder Circuit', '8', 0, 'Create a circuit on an overhanging bouldering wall. The circuit should be between 20 and 60 moves depending on the type of climb you are training for. The difficulty should be at a level that you are failing near the end or only just finishing the circuit on your final lap. Ideally the moves are sustained (so no hard crux, unless that is specific to your goal climb) and on similar style of holds to your goal climb.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Boxing', '8', '7', 'Couldn[t find any boxing exercise so ading one here.....'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Braced Squat', '9', 0, 'Stand with feet slightly wider than shoulder-width apart, while standing as tall as you can.
+Grab a weight plate and hold it out in front of your body with arms straight out. Keep your core tight and stand with a natural arch in your back.
+Now, push hips back and bend knees down into a squat as far as you can. Hold for a few moments and bring yourself back up to the starting position.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Brent', '8', 0, 'asdasdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsaddddddddd'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Bulgarian Split Squat', '9', 0, 'Rest back foot on an elevated surface with sole pointing up. keep your weight over your front leg as you lower yourself'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Burpees', '11', 0, 'Jump, lay down on your chest, do a pushup then jump, repeat'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Butterfly', '11', 0, 'Sit on the butterfly machine, the feet have a good contact with the floor, the upper arms are parallel to the floor. Press your arms together till the handles are practically together (but aren''s!). Go slowly back. The weights should stay all the time in the air.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Butterfly Narrow Grip', '11', 0, 'The movement is the same as with a regular butterfly, only that the grip is narrow:
+Sit on the butterfly machine, the feet have a good contact with the floor, the upper arms are parallel to the floor. Press your arms together till the handles are practically together (but aren''s!). Go slowly back. The weights should stay all the time in the air.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Butterfly Reverse', '13', 0, ''); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Cable Chopper - High-to-Low', '12', 0, 'This is a variant of the twisting Low-to-High Cable Chopper. '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Cable Cross-over', '11', 0, 'Begin with cables at about shoulder height, one in each hand. Take a step forward so that one foot is in front of the other, for stability, and so that there is tension on the cables. Bring hands together in front of you. Try to make your hands overlap (so that the cables cross) a few inches.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Cable External Rotation', '13', 0, 'Steps: Start off placing an extension band around a post or in a secure position where it will not release and is at elbow level.
+Position yourself to the side of the band and with your hand that is opposite of the band, reach out and grab the handle.
+Bring the band to your chest keeping your elbow bent in a 90 degree angle then slowly rotate your arm in a backhand motion so that the band externally rotates out
+Continue out as far as possible so that you feel a stretch in your shoulders, hold for a count and then return back to the starting position.
+Repeat for as many reps and sets as desired.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Curl su Panca a 45°', '8', '8', 'Bicipiti su panca a 45°. Il movimento deve essere completo'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Curl Ups', '10', '4', 'Get some rock hard abs. Gains for life fam. Get some rock hard abs. Gains for life fam.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Curl Ups', '10', '9', 'Get some rock hard abs. Gains for life fam. Get some rock hard abs. Gains for life fam.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Deadbug', '10', 0, 'Lie on your back, with your hips and knees bent to 90°. Raise both arms toward the ceiling. Pull your lower back to the floor to eliminate the gap. Start by pressing one leg out, and tapping the heel to the floor. "As you extend one leg, exhale as much as you can, keeping your lower back glued to the floor," Dunham says. When you can’t exhale any more, pull your knee back to the starting position. Make this more difficult by holding weight in your hands, or by lowering opposite arm and leg.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Deadbug', '10', 0, 'The core plays a big role in helping you move your limbs while stabilizing your spine—an incredibly important prerequisite for most strength-training exercises," Dunham says. The deadbug protects your lower back mid-movement and keeps you from wasting any energy.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Deadbug', '10', 0, 'The core plays a big role in helping you move your limbs while stabilizing your spine—an incredibly important prerequisite for most strength-training exercises," Dunham says. The deadbug protects your lower back mid-movement and keeps you from wasting any energy.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Deadhang', '8', 0, 'Deadhang performed on an edge either with or without added weight (adujst edge or weight to adjust difficulty)'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Deadlifts', '12', '1', 'Stand firmly, with your feet slightly more than shoulder wide apart. Stand directly behind the bar where it should barely touch your shin, your feet pointing a bit out. Bend down with a straight back, the knees also pointing somewhat out. Grab the bar with a shoulder wide grip, one underhand, one reverse grip.
+Pull the weight up. At the highest point make a slight hollow back and pull the bar back. Hold 1 or 2 seconds that position. Go down, making sure the back is not bent. Once down you can either go back again as soon as the weights touch the floor, or make a pause, depending on the weight.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Decline Bench Press Barbell', '11', '1', 'Lay down on a decline bench, the bar should be directly above your eyes, the knees are somewhat angled and the feet are firmly on the floor. Concentrate, breath deeply and grab the bar more than shoulder wide. Bring it slowly down till it briefly touches your chest at the height of your nipples. Push the bar up.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Decline Bench Press Dumbbell', '11', '3', 'Take two dumbbells and sit on a decline bench, the feet are firmly on the floor, the head is resting the bench. Hold the weights next to the chest, at the height of your nipples and press them up till the arms are stretched. Let the weight slowly and controlled down.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Decline Press Sit-Up', '10', '1', '
+Lie down on a bench with a barbell resting on your chest. Position your legs so they are secure on the extension of the abdominal bench.
+While inhaling, tighten your abdominals and glutes. Simultaneously curl your torso as you do when performing a sit-up and press the barbell to an overhead position while exhaling. 
+Lower your upper body back down to the starting position while bringing the barbell back down to your torso. Remember to breathe in while lowering the body.
+
+Caution: It is best to have a spotter while performing this exercise so that it is easier to get the barbell and also get rid of it. Also, always start with an empty bar and do not use jerking motions at any time.
+ 
+Reference: http://www.bodybuilding.com/exercises/detail/view/name/press-sit-up'); 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Decline Press Sit-Up', '10', '8', '
+Lie down on a bench with a barbell resting on your chest. Position your legs so they are secure on the extension of the abdominal bench.
+While inhaling, tighten your abdominals and glutes. Simultaneously curl your torso as you do when performing a sit-up and press the barbell to an overhead position while exhaling. 
+Lower your upper body back down to the starting position while bringing the barbell back down to your torso. Remember to breathe in while lowering the body.
+
+Caution: It is best to have a spotter while performing this exercise so that it is easier to get the barbell and also get rid of it. Also, always start with an empty bar and do not use jerking motions at any time.
+ 
+Reference: http://www.bodybuilding.com/exercises/detail/view/name/press-sit-up'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Decline Pushups', '11', '7', 'With your feet raised approximately 30cm on a platform, align your shoulders, elbows and hands, then perform regular pushups. This emphasises the clavicular fibers of the pectoralis major.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Deficit Deadlift', '12', '1', 'Preparation
+Stand on weight plate, bumper plate, or shallow elevated platform with loaded bar above feet. Squat down and grasp bar with shoulder width or slightly wider overhand or mixed grip.
+ 
+Execution
+Lift bar by extending hips and knees to full extension. Pull shoulders back at top of lift if rounded. Return weights to floor by bending hips back while allowing knees to bend forward, keeping back straight and knees pointed same direction as feet. Repeat.
+ 
+Comments
+Throughout lift, keep hips low, shoulders high, arms and back straight. Knees should point same direction as feet throughout movement. Keep bar close to body to improve mechanical leverage. Grip strength and strength endurance often limit ability to perform multiple reps at heavy resistances. Gym chalk, wrist straps, grip work, and mixed grip can be used to enhance grip. Mixed grip indicates one hand holding with overhand grip and other hand holding with underhand grip. Lever barbell jack can be used to lift barbell from floor for easier loading and unloading of weight plates.
+Barbell Deficit Deadlift emphasizes building strength through lowest portion of Deadlift. Target muscle is exercised isometrically. Heavy barbell deadlifts significantly engages Latissmus Dorsi. See Barbell Deficit Deadlift under Gluteus Maximus. Also see Deadlift Analysis.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Depth Jumps', '9', 0, 'Depth Jumps'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Developpé Couché', '11', '1', 'chest test chest test chest test chest test chest test chest test chest test'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Developpé Couché', '11', '8', 'chest test chest test chest test chest test chest test chest test chest test'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Diagonal Shoulder Press', '13', '8', 'You sit at the bench press device, back slightly tilted to the back. The bar should be about 20 cm in front of you. Then you push the bar and take it back again, as you would with a bench press.
+In this position you strain your chest muscles a lot less, which is nice if you want to train, but your chest hasn''s recovered yet.
+Here''s a link to a girl on a machine specialized for this exercise, to give a better description than my failing words above.
+http://www.schnell-online.de/db_imgs/products/img/t-80400.jpg'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dips', '8', 0, 'Hold onto the bars at a narrow place (if they are not parallel) and press yourself up, but don''s stretch the arms completely, so the muscles stay during the whole exercise under tension. Now bend the arms and go down as much as you can, keeping the elbows always pointing back, At this point, you can make a short pause before repeating the movement.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dips Between Two Benches', '8', '8', 'Put two benches so far appart, that you can hold onto one with your hands and are just able to reach the other with your feet. The legs stay during the exercise completely stretched. With your elbows facing back, bend them as much as you can. Push yourself up, but don''s stretch out the arms.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dragon Flags', '10', 0, 'A dragon flag is typically performed lying face-up on a bench or on the ground with your hands grasping a sturdy object behind you for support.
+From here, the objective is to lift your entire body up in a straight line, stacking it vertically over your shoulders, then slowly lower back down until parallel to the ground and repeat.
+The aim is to keep your body straight, so do your best to avoid bending at the hips. Your abs will have to provide extreme stabilization to do so. In fact, you''ll also need to engage your lower back, glutes, and other trunk musculature to maintain your form.
+Though the dragon flag emphasizes the abs, it''s really a full-body exercise.
+ T-nation'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Duck Walks', '8', '3', 'Grab kettlebell and walk while holding it between legs'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dumbbell Concentration Curl', '8', '3', 'Sit on bench. Grasp dumbbell between feet. Place back of upper arm to inner thigh. Lean into leg to raise elbow slightly.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dumbbell Goblet Squat', '9', '3', 'Grasp dumbbell with both hands at the sides of the upper plates. Hold dumbbell in front of chest, close to torso. Place feet about shoulderwide apart, keep knees slightly bent.
+Squat down until thighs are parallel to floor. Keep back straight, bend and move hips backward to keep knees above feet. Return, keep knees slightly flexed. Repeat.
+Keep bodyweight on heels and look ahead or slightly above to keep back straight.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dumbbell Incline Curl', '8', '3', 'With elbows back to sides, raise one dumbbell and rotate forearm until forearm is vertical and palm faces shoulder. Lower to original position and repeat with opposite arm. Continue to alternate between sides.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dumbbell Lunges Standing', '9', '3', '.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dumbbell Lunges Walking', '9', '3', 'Take two dumbbells in your hands, stand straight, feet about shoulder wide. Take one long step so that the front knee is approximately forming a right angle. The back leg is streched, the knee is low but doesn''s touch the ground. "Complete" the step by standing up and repeat the movement with the other leg.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dumbbell Side Bends', '10', '3', '1. Stand straight with shoulders and feet wide apart and hold a dumbbell in your left hand.
+2. Starting position: Place your right hand on your waist.
+3. Now, keep your head and back straight and bend only from your waist to your right.
+4. Inhale, and bend as much as you can and hold for a count of two.
+5. Final position: Get back to the start position, exhale as you do so.
+6. Now perform the similar steps bending to your left.
+Reference : http://workouttrends.com/how-to-do-dumbbell-side-bends'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dumbbells on Scott Machine', '8', 0, ''); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dumbbell Spider Curl', '8', '3', 'Keep your arms at a dead hang in front of you.Contract your biceps as you curl the dumbbells up towards your torso.Squeeze at the top of the repetition for one second.Lower the dumbbells in a slow and controlled manner until fully extended.Repeat for the desired number of repetitions.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dumbbell Split Squat', '9', '3', 'Split Squats with Dumbbells: http://www.bodybuilding.com/exercises/detail/view/name/split-squat-with-dumbbells'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dumbbell Triceps Extension', '8', '3', 'Position one dumbbell over head with both hands under inner plate (heart shaped grip).
+With elbows over head, lower forearm behind upper arm by flexing elbows. Flex wrists at bottom to avoid hitting dumbbell on back of neck. Raise dumbbell over head by extending elbows while hyperextending wrists. Return and repeat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dumbell Romanian Deadlift', '9', '3', 'Romanian Deadlifts with dumbells in each hands instead of a barbell.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Dumbell Row', '12', '3', 'Bent over dumbell row, leaning on bench'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Elliptical', '9', 0, 'Full body cardio work out that predominantly works the lower body but does do a lite upper body workout.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'ExerA', '11', '10', 'sdfdsdsdsdf dfsdfdf sdf sdf'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Facepull', '13', 0, 'Attach a rope to a pulley station set at about chest level.
+Step back so you're supporting the weight with arms completely outstretched and assume a staggered (one foot forward) stance. Bend the knees slightly for a stable base.
+Retract the scapulae (squeeze your partner's finger with your shoulder blades) and pull the center of the rope slightly up towards the face. A good cue is to think about pulling the ends of the rope apart, not just pulling back.
+As you near your face, externally rotate so your knuckles are facing the ceiling.
+Hold for one second at the top position and slowly lower.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Farmers Walks', '8', '3', 'Grab dumbbells and walk
+ '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Fentes Avant', '9', 0, 'fentes avant buste droit ( quadriceps ) buste penché ( fessisers )'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Fire Hydrant', '9', '7', '1. Position yourself on all fours with shoulders wide apart and palms flat.
+2. Keep your knees, hip wide apart and bend them at a 90-degrees angle.3. Keep your back straight, raise your right thigh and bring it close to your chest as much as you can.4. Then raise the same thigh out to the side by keeping the hips still.5. Now, kick your raised leg slowly in the backward position.6. Now perform these steps with your left leg.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Flutter Kicks', '10', 0, 'Laying on the back, lift your straightened legs from the ground at a 45 degree angle. 
+As your Left foot travels downward and nearly touches the floor, your Right foot should seek to reach a 90 degree angle, or as close to one as possible.
+Bring your R foot down until it nearly touches the floor, and bring your L foot upwards.  Maintain leg rigidity throughout the exercise.  Your head should stay off the ground, supported by tightened upper abdominals.
+(L up R down, L down R up, x2)  ^v, v^, ^v, v^ = 1 rep
+Primarily works the Rectus Abdominus, the hip flexors and the lower back. Secondarily works the Obliques.  Emphasis placed on the lower quadrant of the abs.
+ '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Fly With Cable', '11', 0, ''); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Fly With Dumbbells', '11', '3', 'Take two dumbbells and lay on a bench, make sure the feet are firmly on the ground and your back is not arched, but has good contact with the bench. The arms are stretched in front of you, about shoulder wide. Bend now the arms a bit and let them down with a half-circle movement to the side. Without changing the angle of the elbow bring them in a fluid movement back up.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Fly With Dumbbells, Decline Bench', '11', '3', 'The exercise is the same as with a regular bench:
+Take two dumbbells and lay on a bench, make sure the feet are firmly on the ground and your back is not arched, but has good contact with the bench. The arms are stretched in front of you, about shoulder wide. Bend now the arms a bit and let them down with a half-circle movement to the side. Without changing the angle of the elbow bring them in a fluid movement back up.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Forearm Curl', '8', '3', 'Works the wrist flexor muscles on the front of the forearms.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Free Weight Lats Pulldown', '12', 0, 'thay vì là thanh đòn thì bây giờ sẽ là 2 tay cầm , giúp bạn cơ động được nhiều hơn. Bài tập này chúng ta sẽ tập giống như bài Lats Pull Down nhưng thay vì kéo theo phương hơi xéo lên một tí thì bây giờ ở động tác này chúng ta sẽ kéo theo phương thẳng đứng. Kéo theo nhiều phương sẽ cho chúng ta những kích thích cơ khác nhau. Đây là một bài tập rất tốt cho phần cơ xô. Khi ngồi vào chúng ta vẫn phải chỉnh ghế sao cho vừa vặn , khi kéo xuống chúng ta cố gắng kéo sao cho 2 tay cầm ra xa nhau một tí, về cách hít thở thì cũng như vậy, khi bắt đầu dùng lực thì vẫn hít vào và khi kết thúc lực sẽ thở ra. Tư thế bắt đầu sẽ là hai tay kẹp vào đầu , khi xuống các bạn ưỡn ngực ra một tí xíu. Các bạn có thể ngả ra một tí xíu nếu bạn thích.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'French Press (skullcrusher) Dumbbells', '8', '8', 'Hold the dumbbells and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch your arms with the weights and bend them so that the dumbbells are lowered (make sure they don''s touch each other). Just before they touch your forehead, push them up.
+Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.'); 
+VALUES(EXERCISE_ID_SEQ.nextval, 'French Press (skullcrusher) Dumbbells', '8', '3', 'Hold the dumbbells and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch your arms with the weights and bend them so that the dumbbells are lowered (make sure they don''s touch each other). Just before they touch your forehead, push them up.
+Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'French Press (skullcrusher) SZ-bar', '8', '8', 'Hold the SZ-bar and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch your arms with the bar and bend them so that the bar is lowered. Just before it touches your forehead, push it up.
+Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.'); 
+VALUES(EXERCISE_ID_SEQ.nextval, 'French Press (skullcrusher) SZ-bar', '8', '2', 'Hold the SZ-bar and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch your arms with the bar and bend them so that the bar is lowered. Just before it touches your forehead, push it up.
+Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Front Raises', '13', '1', 'To execute the exercise, the lifter stands with their feet shoulder width apart and weights or resistance handles held by their side with a pronated (overhand) grip.
+The movement is to bring the arms up in front of the body to eye level and with only a slight bend in the elbow. This isolates the anterior deltoid muscle (front of the shoulder) and uses the anterior deltoid to lift the weight.
+When lifting it is important to keep the body still so the anterior deltoid is fully utilised; if the weight cannot be lifted by standing still then it is too heavy and a lower weight is needed. It is important to keep a slight bend in the elbow when lifting as keeping the elbow locked will add stress to the elbow joint and could cause injury.
+A neutral grip, similar to that used in the hammer curl, can also be used. With this variation the weight is again raised to eye level, but out to a 45 degree angle from the front of the body. This may be beneficial for those with shoulder injuries, particularly those related to the rotator cuff.'); 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Front Raises', '13', '3', 'To execute the exercise, the lifter stands with their feet shoulder width apart and weights or resistance handles held by their side with a pronated (overhand) grip.
+The movement is to bring the arms up in front of the body to eye level and with only a slight bend in the elbow. This isolates the anterior deltoid muscle (front of the shoulder) and uses the anterior deltoid to lift the weight.
+When lifting it is important to keep the body still so the anterior deltoid is fully utilised; if the weight cannot be lifted by standing still then it is too heavy and a lower weight is needed. It is important to keep a slight bend in the elbow when lifting as keeping the elbow locked will add stress to the elbow joint and could cause injury.
+A neutral grip, similar to that used in the hammer curl, can also be used. With this variation the weight is again raised to eye level, but out to a 45 degree angle from the front of the body. This may be beneficial for those with shoulder injuries, particularly those related to the rotator cuff.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Front Squats', '9', '1', 'Squats'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Full Sit Outs', '10', '7', '(A) Get in high plank position on your hands and toes.(B) Shift your weight to your left hand as you turn your body to the right; bend your right leg behind you and extend your right arm up. Return to the center and repeat on the opposite side. Continue, alternating sides.Make it easier: Don’t raise your arm after you bend your leg behind you.Make it harder: Balance with your arm and leg extended for two counts.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Glute', '12', 0, 'Glute machine'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Glute Bridge', '9', 0, 'Lie on you back with your hips and knees flexed, feet on the ground. From this position, raise your butt off of the ground to a height where your body makes a straight line from your knees to your shoulders. To make the exercise more intense, you can add weight by letting a barbell rest on your hips as you complete the motion, or you can put your feet on a slightly higher surface such as a step or a bench.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Good Mornings', '9', 0, ''); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hammer Curl', '8', '1', 'This exercise will help you to improve your biceps volume and force.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hammercurls', '8', '3', 'Hold two dumbbells and sit on a bench with a straight back, the shoulders are slightly rolled backwards. Your pals point to your body. Bend the arms and bring the weight up with a fast movement. Don''s rotate your hands, as with the curls. Without any pause bring the dumbbell down with a slow, controlled movement.
+Don''s swing your body during the exercise, the biceps should do all the work here. The elbows are at your side and don''s move.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hammercurls on Cable', '8', 0, 'Take a cable in your hands (palms parallel, point to each other), the body is straight. Bend the arms and bring the weight up with a fast movement. Without any pause bring it back down with a slow, controlled movement, but don''s stretch completely your arms.
+Don''s swing your body during the exercise, the biceps should do all the work here. The elbows are at your side and don''s move.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hamstring Curls', '9', 0, 'Kneel, anchor feet; lean forward to the floor, pull back-up to kneeling position'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hand Grip', '8', 0, 'chrome Hand Flex Grip to build up forearms muscles'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hanging Leg Raises', '10', 0, 'Hanging from bar or straps, bring legs up with knees extended or flexed'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hercules Pillars', '8', 0, 'Grab two cables stand in the middle so both have tension and hold'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'High Knee Jumps', '9', 0, 'Start with legs slightly wider than shoulder width
+Drop into a bodyweight squat
+As you hit the bottom of the squat, explode upwards into a jump while simultaneously tucking your knees into your chest midflight.  Remain tucked until the apex of your jump.
+Land on both feet, making sure your knees are not locked so as to avoid excessive strain upon your joints.  Collect yourself into the next rep as quickly but under control as possible.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'High Knees', '9', 0, 'Start with legs at a comfortable standing width
+Run in place, bringing knees to or above waist level'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'High Pull', '13', 0, 'Use a light barbell, perform explosive lift up starting from underneath knee cap level. Lift/raise explosively using hips, at shoulder level. Tempo: 2111'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hindu Squats', '9', 0, 'Start with your feet shoulder width apart and arms slightly behind your back.
+As you descend towards the floor, raise your heels off the ground, while keeping your back as vertical  as possible. 
+Upon attaining the bottom position, touch the hands to the heels.
+Then stand up ending with the heels on the ground, arms extended in front of the chest then rowing into the start position.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hip Raise, Lying', '12', '7', 'Lying down on your back, with your feet flat on the floor. Raise your hips up evenly as high as you can and hold for as long as you can.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hip Rockers', '9', '4', 'Band at hip, rock back and forth.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hip Thrusts', '9', '1', '
+Start with your shoulder blades against a bench, and your arms spread across it for stability.  If your shoulders don’t reach the bench, you may need to start with your butt slightly off the floor.  Bend your knees to about 90 degrees, and make sure your feet are flat on the floor.
+Take a big breath in, blow your air out fully, and brace your core.
+Squeeze your glutes, lift up your hips pushing the barbell up. Hold for a second or two.
+Slowly reslease and repeat.
+'); 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hip Thrusts', '9', '8', '
+Start with your shoulder blades against a bench, and your arms spread across it for stability.  If your shoulders don’t reach the bench, you may need to start with your butt slightly off the floor.  Bend your knees to about 90 degrees, and make sure your feet are flat on the floor.
+Take a big breath in, blow your air out fully, and brace your core.
+Squeeze your glutes, lift up your hips pushing the barbell up. Hold for a second or two.
+Slowly reslease and repeat.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hollow Hold', '10', '4', 'Get on a mat and lie on your back. Contract your abs, stretch your raise and legs and raise them (your head and shoulders are also be raised). Make sure your lower back remains in contact with the mat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hollow Hold', '10', '7', 'Get on a mat and lie on your back. Contract your abs, stretch your raise and legs and raise them (your head and shoulders are also be raised). Make sure your lower back remains in contact with the mat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Horizontal Rows', '12', 0, '
+Straight body
+Elbows in
+Arms straight at the bottom
+Rings/bar to chest and shoulder blades fully retracted (pinched together) at the top
+Don''s let your shoulders shrug up
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Hyperextensions', '12', 0, 'Lay on the hyperextension pad with the belly button just at the leading edge, the upper body can hang freely. Tense your whole back''s muscles and bring your upper body up till it is horizontal, but not more. Go slowly down and don''s relax your muscles.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Barbell Bench Press', '11', '1', '
+Load the bar to an appropriate weight for your training.
+Lay on the bench with your feet flat on the ground, driving through to your hips. Your back should be arched, and your shoulder blades retracted.
+Take a medium, pronated grip covering the rings on the bar. Remove the bar from the rack, holding the weight above your chest with your arms extended. This will be your starting position.
+Lower the bar to the sternum by flexing the elbows. Maintain control and do not bounce the bar off of your chest. Your lats should stay tight and elbows slightly drawn in.
+After touching your torso with the bar, extend the elbows to return the bar to the starting position.
+'); 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Barbell Bench Press', '11', '8', '
+Load the bar to an appropriate weight for your training.
+Lay on the bench with your feet flat on the ground, driving through to your hips. Your back should be arched, and your shoulder blades retracted.
+Take a medium, pronated grip covering the rings on the bar. Remove the bar from the rack, holding the weight above your chest with your arms extended. This will be your starting position.
+Lower the bar to the sternum by flexing the elbows. Maintain control and do not bounce the bar off of your chest. Your lats should stay tight and elbows slightly drawn in.
+After touching your torso with the bar, extend the elbows to return the bar to the starting position.
+'); 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Barbell Bench Press', '11', '9', '
+Load the bar to an appropriate weight for your training.
+Lay on the bench with your feet flat on the ground, driving through to your hips. Your back should be arched, and your shoulder blades retracted.
+Take a medium, pronated grip covering the rings on the bar. Remove the bar from the rack, holding the weight above your chest with your arms extended. This will be your starting position.
+Lower the bar to the sternum by flexing the elbows. Maintain control and do not bounce the bar off of your chest. Your lats should stay tight and elbows slightly drawn in.
+After touching your torso with the bar, extend the elbows to return the bar to the starting position.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Bench Press', '11', '1', 'To do slowly, tempo is 4010'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Bench Press', '11', '9', 'To do slowly, tempo is 4010'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Inclined Bench', '11', '9', 'Simple chest bench machine rotate between chest muscles'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Inclined Bench', '11', '9', 'Simple chest bench machine rotate between chest muscles'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Dumbbell Flye', '11', '3', 'Use inclined bench. Hold dumbbells straight out to your sides, elbows slightly bent. Bring arms together above you, keeping angle of elbows fixed.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Dumbbell Flye', '11', '9', 'Use inclined bench. Hold dumbbells straight out to your sides, elbows slightly bent. Bring arms together above you, keeping angle of elbows fixed.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Dumbbell Press', '11', '3', '
+Bench should be angled anywhere from 30 to 45 degrees
+Be sure to press dumbbells straight upward (perpendicular to the floor)
+'); 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Dumbbell Press', '11', '9', '
+Bench should be angled anywhere from 30 to 45 degrees
+Be sure to press dumbbells straight upward (perpendicular to the floor)
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Dumbbell Row', '12', '8', '
+Using a neutral grip, lean into an incline bench.
+Take a dumbbell in each hand with a neutral grip, beginning with the arms straight. This will be your starting position.
+Retract the shoulder blades and flex the elbows to row the dumbbells to your side.
+Pause at the top of the motion, and then return to the starting position.
+'); 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Dumbbell Row', '12', '3', '
+Using a neutral grip, lean into an incline bench.
+Take a dumbbell in each hand with a neutral grip, beginning with the arms straight. This will be your starting position.
+Retract the shoulder blades and flex the elbows to row the dumbbells to your side.
+Pause at the top of the motion, and then return to the starting position.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Machine Chest Press', '11', 0, '
+Load an appropriate weight onto the pins and adjust the seat for your height. The handles should be near the top of the pectorals at the beginning of the motion. Your chest and head should be up and your shoulder blades retracted. This will be your starting position.
+Press the handles forward by extending through the elbow.
+After a brief pause at the top, return the weight just above the start position, keeping tension on the muscles by not returning the weight to the stops until the set is complete.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Plank With Alternate Floor Touch', '10', 0, 'Perform the plank with legs elevated, feet on a gymball. Once stabilised, slowly move one foot sideways off the ball, then make it touch the floor, then come back to starting position. Alternate with the other foot.
+This is a core exercise.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Incline Pushups', '11', 0, 'Regular push with a 30 degree incline.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Isometric Wipers', '11', '7', 'Assume push-up position, with hands slightly wider than shoulder width.
+Shift body weight as far as possible to one side, allowing the elbow on that side to flex. 
+Reverse the motion, moving completely over to the other side.
+Return to the starting position, and repeat for the desired number of repetitions.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Jazz Cersixe', '8', '1', 'testing a temp exervcise so this is a minimum of 40 characters to pass'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Jogging', '9', 0, 'Get your shoes on, go outside and start running at a moderate pace.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Jumping Jacks', '14', '7', '
+Stand with feet together and arms at the sides
+Jump to a position with the legs spread wide and the hands touching overhead
+Repeat
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Jumping Jacks', '9', 0, 'Jump and extend arms towards head'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Karo''s Kicks', '9', '8', 'A kick developed by Karolina, it''s used to strengthen swimming muscles'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Kettlebell Clean & Press', '9', '10', 'Doing a clean and press but with ketlebells.
+ 
+Start with the hips and butt back like a kettlebell swing, then fire glutes, hips and hamstrings to yeet the kettlebells forward and let the momentum swing them up as you straighten your legs and body. Using momentum from legs and butt, and some arm work, swing the kettebells up and over to the back of your wrists, arms bent and upright and at shoulder width. Widen stance slightly, drop a couple inches like you're beginning a squat, and then fire glutes and quads in conjunction with shoulders to put kettlebells over your head. Drop back down to shoulder head, swing back down and repeat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Kettlebell Swing', '12', '10', 'Swing with a Kettlebell with power from your hips '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Kettlebell Swings', '9', 0, 'Hold the kettlebell securely in both hands. Keep your back flat throughout the move, avoiding any rounding of the spine.Keeping your knees "soft", hinge your hips backwards, letting the kettlebell swing between your knees.
+You want to bend from the hips as far as you can without letting your back round forwards. Then, snap your hips forwards quickly and standing up straight, locking your body in an upright posture.
+The speed you do this will cause your arms and the kettlebell to swing up in front of you. Don''s try to lift the kettlebell with your arms. The snapping forwards of your hips will cause the kettlebell to swing forwards through momentum. Depending on the weight of the kettlebell and the speed of your hip movement, your arms will swing up to about shoulder height. At the top of this swing, let your hips hinge backwards again as the kettlebell swings back down to between your legs and the start of the next repetition.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Landmine Twists', '10', '1', 'Placing a barbell in the landmine or in a corner, grasp the head of the barbell besides your body while looking away from the barbell. Twist the barbell as if you were swinging a golf club. Repeat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Lateral Raises', '13', '3', '.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Lateral Raises on Cable, One Armed', '13', 0, '.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Lateral-to-Front Raises', '13', '3', '(1) Perform a lateral raise, pausing at the top of the lift (2).
+Instead of lowering the weight, bring it to the front of your body so that you appear to be at the top position of a front raise.  You will do this by using a Pec Fly motion, maintaining straight arms. (3)
+Now lower the weight to your quadriceps, or, in other words, lower the dumbbells as though you are completing a Front Raise repetition. (4)
+Reverse the motion:  Perform a front raise (5), at the apex of the lift use a Reverse Fly motion to position the weights at the top of a Lateral Raise (6), and finally, lower the weights until your palms are essentially touching the sides of your thighs (7).  THIS IS ONE REP.
+(1) l  front view  (2) -l-  FV    (3) l-  side view   (4) l  SV/FV   (5) l-  SV   (6) -l-  FV    (7)  l  FV/SV'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Lat Pull Down (Leaning Back)', '12', 0, 'Lean Back, Pull into chest'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Lat Pull Down (Straight Back)', '12', 0, 'Pull bar down to strenum and keep straight back.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Leg Curls (laying)', '9', 0, 'Lay on a bench and put your calves behind the leg holder (better if they are hold on around the lower calves). Hold a grip on the bars to make sure the body is firmly in place. Bend your legs bringing the weight up, go slowly back. During the exercise the body should not move, all work is done by the legs.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Leg Curls (sitting)', '9', 0, ''); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Leg Curls (standing)', '9', 0, ''); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Leg Extension', '9', 0, 'Seated Leg Extension Machine'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Leg Presses (narrow)', '9', 0, 'The exercise is very similar to the wide leg press:
+Sit on the machine and put your feet on the platform so far apart  that you could just put another foot in between them. The feet are parallel and point up.
+Lower the weight so much, that the knees form a right angle. Push immediately the platform up again, without any pause. When in the lower position, the knees point a bit outwards and the movement should be always fluid.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Leg Presses (wide)', '9', 0, 'Sit on the machine and put your feet on the platform, a bit more than shoulder wide. The feet are turned outwards by a few degrees.
+Lower the weight so much, that the knees form a right angle. Push immediately the platform up again, without any pause. When in the lower position, the knees point a bit outwards and the movement should be always fluid.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Pause Bench', '11', '1', 'Lower the bar to your chest and pause (but do not rest) there for 2 seconds. Press back up. use the same weight you would on bench press, but perform only single reps. Total the number of reps you did in one set of bench press (if you did 3 sets of 8 do 8 sinlge pause bench reps.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Pause Bench', '11', '8', 'Lower the bar to your chest and pause (but do not rest) there for 2 seconds. Press back up. use the same weight you would on bench press, but perform only single reps. Total the number of reps you did in one set of bench press (if you did 3 sets of 8 do 8 sinlge pause bench reps.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Pec Deck Flyes', '11', '1', 'A machine fly, alternatively called a seated lever fly or "Pec Dec" fly is a strength training exercise based on the free weight chest fly. As with the chest fly, the hand and arm move through an arc while the elbow is kept at a constant angle. Flyes are used to work the muscles of the upper body, primarily the sternal head of the pectoralis major. Because these exercises use the arms as levers at their longest possible length, the amount of weight that can be moved is significantly less than equivalent press exercises for the same muscles (the military press and bench press for the shoulder and chest respectively).'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Pelvic Tilting Medium Risk', '12', 0, 'Lay on your back and lift your buttocks off the floor. Feet are flat on the floor. '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Pendelay Rows', '12', '1', 'Back excercise with a barbell with a starting position which is in a bent over position with the back paralell to the ground. The barbell is on the ground at chest level.For the movement grab the barbell at shoulder width grip and pull towards your chest without losing the bent over position and without moving anything but your arms'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Perfect Push Up', '11', 0, 'Push up with perfect push up'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Peso Muerto', '9', '4', 'After you submit the form, the administrators will be notified. Once it is reviewed, it will be added to the database. Till this happens, it will not be visible in the overview or the search. In case you added your email when you registered, you will get notified when the process is completed successfully.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Pike Push Ups', '8', '7', 'Push Up performed from a pike position (optional to have feet elevated).'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Pistol Squat', '9', 0, 'One legged squat'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Planche Lean', '12', '7', 'Planche lean is a progression excercise that gets you closer to doing planche. Even though it''s under "back" category, it''s really a full-body excercise.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Plank', '10', 0, 'The plank is one of the most common core exercises, ever, but most guys get it wrong. Creating tension in your abs primes your body to maximally contract all of its muscles. "This is a very useful ability when sprinting, jumping, and lifting weights," Dunham says'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Plank', '10', '7', 'Get into a position on the floor supporting your weight on your forearms and toes. Arms are bent and directly below the shoulder. 
+Keep your body straight at all times and hold this position as long as possible. To increase difficulty an arm or leg can be raised while performing this exercise.  '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Plank Walk Up', '10', 0, 'Hand Plank Position then walk up til butt is the air.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Pompes', '8', 0, 'Mettez vous sur le ventre, soulevez vous à la force de vos bras...'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Power Clean', '13', 0, 'Olympic weight lifting'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Preacher Curls', '8', 0, ' Place the EZ curl bar on the rest handles in front of the preacher bench. Lean over the bench and grab the EZ curl bar with palms up. Sit down on the preacher bench seat so your upper arms rest on top of the pad and your chest is pressed against the pad. Lower the weight until your elbows are extended and arms are straight. Bring the weights back up to the starting point by contracting biceps. Repeat'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Prone Scapular Retraction - Arms at Side', '12', 0, 'Lying on stomach with head on towel.
+Stretch arms straight out to your sides.
+Slowly lift your arms, pulling your shoulderblades together, hold for 3 seconds.
+ '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Propadanje', '11', 0, 'Grudi'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Pull-over  (Extended Arms)', '12', '6', '
+Stand up, take the pull bar and pull down with extended arms.
+Going back to the original position
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Pullover With Dumbbell', '11', '3', 'Bajar la mancuerna por detras de la cabeza
+Volver a la posición inicial'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Pull-ups', '12', '6', 'Grab the pull up bar with a wide grip, the body is hanging freely. Keep your chest out and pull yourself up till your chin reaches the bar or it touches your neck, if you want to pull behind you. Go with a slow and controlled movement down, always keeping the chest out.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Lying Triceps Extension', '8', '8', 'Lay down and pull a dumbbell over your head.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Lying Windscreen Wipers', '10', 0, 'Lie down on back on mat, stretch out arms for support. Raise legs, keeping them stretched. Drop both legs to right side, then back up. Drop down to left side then back up. Repeat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Man Breakers', '12', '3', 'From the floor do a back low row than a burpee into shoulder press and back down into pushup position'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Metin', '9', 0, 'Grab dumbbells and extend arms to side and hold as long'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Metka', '10', 0, 'lehneme na podložku. Medicinbal do ruky natáhneme jí před sebe a provádíme zkracovačky .'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'MGM Machine', '12', 0, ''); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Military Press', '8', '2', 'On an SZ-bar grip your hands on the outside of each bend and stand with your arms straight down, palms facing your legs. Pull the bar (bending your arms at the elbow) to your chest, and the push the bar above your head (arms as straight as possible). Return the bar to your chest by dropping your arms at the elbows. Return the bar to it''s origional position (stand with your arms straight down, palms facing your legs.)'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Military Press', '13', '1', 'The military press is a variation of the overhead press weight training exercise using very strict form and no pre-movement momentum.The military press targets the deltoid muscles in the shoulders as well as the triceps. Additionally, it works the core and legs, which the lifter uses to help stabilize the weight.The lift begins with the lifter standing and the barbell on the anterior deltoids. The lifter then raises the barbell overhead by pressing the palms of the hands against the underside of the barbell.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Muscle up', '12', '6', 'The body is then explosively pulled up by the arms in a radial pull-up, with greater speed than a regular pull-up. When the bar approaches the upper chest, the wrists are swiftly flexed to bring the forearms above the bar. The body is leaned forward, and the elbows are straightened by activating the triceps. The routine is considered complete when the bar is at the level of the waist and the arms are fully straight.
+To dismount, the arms are bent at the elbow, and the body is lowered to the floor, and the exercise can be repeated.
+As a relatively advanced exercise, muscle-ups are typically first learned with an assistive kip. The legs swing (kip) up and provide momentum to assist in the explosive upward force needed to ascend above the bar. More advanced athletes can perform a strict variation of the muscle-up which is done slowly, without any kip. This variation begins with a still dead hang and uses isometric muscle contraction to ascend above the bar in a slow, controlled fashion.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'my Exercise', '10', '8', 'ggfgdgd fdfdf f fd fs fs f sf s f s fs f sf'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'my Exercise', '10', '3', 'ggfgdgd fdfdf f fd fs fs f sf s f s fs f sf'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Negative Crunches', '10', 0, 'Sit yourself on the decline bench and fix your legs. Cross your arms over the chest and bring with a rolling movement your upper body up, go now without a pause and with a slow movement down again. Don''s let your head move during the exercise.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Nuevo', '13', '6', 'she has dndnud cd cuc dndnud cd cuc dncmdncjd7dncnc dhdhdnsjdndndnd MD djdn'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Nuevo Ejercicio', '10', '1', 'qwertjdmfkcjfnvjfnvjfnvjfnvjnvjnvjvnvjnnnnnnnnnnnncbdhcbdhcbdhcbdhcbdhcbdhcbcgdbcgdbcgbdgcbdgbchcbchdbchbcgdbcgbcgdbbccbcbcbvbxvxvxvxgdgdgdgdgdgdgfhfhfhfhdhdhdhdhdhdjdjdjdjdjdjdjjdududududueueueueueueueueyeyeyeyeyeyeyeyeyefefefefefgrgrgrgrgrgrggrgrhdhdhdyfgfbcnvjfkgkakakaiqiqiqieieieiejejejejejejendndndndnshhshshsshhshshshshhshhshhshhshhshshfaffaffaftwttwttwtgeggeggegydyydyydyydfgjdjdjmjdjdiekdjdkdjeudjeidjdkejdudjeidkdjeudjeiekdiejdujdjdjdjdjdndjdndj'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Nuevo Ejercicio', '10', '4', 'qwertjdmfkcjfnvjfnvjfnvjfnvjnvjnvjvnvjnnnnnnnnnnnncbdhcbdhcbdhcbdhcbdhcbdhcbcgdbcgdbcgbdgcbdgbchcbchdbchbcgdbcgbcgdbbccbcbcbvbxvxvxvxgdgdgdgdgdgdgfhfhfhfhdhdhdhdhdhdjdjdjdjdjdjdjjdududududueueueueueueueueyeyeyeyeyeyeyeyeyefefefefefgrgrgrgrgrgrggrgrhdhdhdyfgfbcnvjfkgkakakaiqiqiqieieieiejejejejejejendndndndnshhshshsshhshshshshhshhshhshhshhshshfaffaffaftwttwttwtgeggeggegydyydyydyydfgjdjdjmjdjdiekdjdkdjeudjeidjdkejdudjeidkdjeudjeiekdiejdujdjdjdjdjdndjdndj'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Nuevo Ejercicio', '10', '9', 'qwertjdmfkcjfnvjfnvjfnvjfnvjnvjnvjvnvjnnnnnnnnnnnncbdhcbdhcbdhcbdhcbdhcbdhcbcgdbcgdbcgbdgcbdgbchcbchdbchbcgdbcgbcgdbbccbcbcbvbxvxvxvxgdgdgdgdgdgdgfhfhfhfhdhdhdhdhdhdjdjdjdjdjdjdjjdududududueueueueueueueueyeyeyeyeyeyeyeyeyefefefefefgrgrgrgrgrgrggrgrhdhdhdyfgfbcnvjfkgkakakaiqiqiqieieieiejejejejejejendndndndnshhshshsshhshshshshhshhshhshhshhshshfaffaffaftwttwttwtgeggeggegydyydyydyydfgjdjdjmjdjdiekdjdkdjeudjeidjdkejdudjeidkdjeudjeiekdiejdujdjdjdjdjdndjdndj'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Nuevo Ejercicio', '10', '10', 'qwertjdmfkcjfnvjfnvjfnvjfnvjnvjnvjvnvjnnnnnnnnnnnncbdhcbdhcbdhcbdhcbdhcbdhcbcgdbcgdbcgbdgcbdgbchcbchdbchbcgdbcgbcgdbbccbcbcbvbxvxvxvxgdgdgdgdgdgdgfhfhfhfhdhdhdhdhdhdjdjdjdjdjdjdjjdududududueueueueueueueueyeyeyeyeyeyeyeyeyefefefefefgrgrgrgrgrgrggrgrhdhdhdyfgfbcnvjfkgkakakaiqiqiqieieieiejejejejejejendndndndnshhshshsshhshshshshhshhshhshhshhshshfaffaffaftwttwttwtgeggeggegydyydyydyydfgjdjdjmjdjdiekdjdkdjeudjeidjdkejdudjeidkdjeudjeiekdiejdujdjdjdjdjdndjdndj'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Oblique Cable Crunch', '10', 0, '
+The standing oblique cable crunch hits the abs and obliques. Set up the high pulley cable machine by attaching a grip attachment and selecting the weight you want to use.
+Grasp the handle with your left hand and face your body at a right angle to the cable pulley with your feet firmly on the floor and shoulder width apart.
+Your forearm should be at a right angle to your upper arm.
+Pull down with your left oblique as far as possible.
+Pause, then lower the weight back down.
+Don''s let the weight drop to the stack at any time throughout the exercise.
+Repeat this movement for the desired number of reps and then switch to your other side. 
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'One-Arm Dumbbell Floor Press', '11', '3', 'One-Arm Dumbbell Floor Press
+Chest Press from floor one arm at a time.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Outer Thigh Machine', '9', 0, 'Inner/Outer-Thigh Machines. The inner/outer-thigh—a.k.a. adductor/abductor—machine is the result of too many trainees overstretching and spraining knee ligaments by using cables attached to their ankles for inner- and outer-thigh-muscletraining'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Overhand Cable Curl', '10', 0, 'Hands at shoulder height, curl arms in toward head, then back out.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Overhead Squat', '9', 0, 'The barbell is held overhead in a wide-arm snatch grip; however, it is also possible to use a closer grip if balance allows.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Overhead Squat With Barbell', '9', '1', 'In this version of the squat you hold the bar overhead as you perform the exercise.
+Steps
+
+Stand with your feet a bit wider than shoulder width apart with your toes pointed slightly outward.
+Grasp a barbell using a wide side snatch grip with your arms and elbows fully extended.
+Keeping the bar overhead, bend your knees and lower your body until your thighs are parallel with the floor.
+Return to starting position
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Parallele', '11', '7', 'Parallele per pettorali bassi, scendi fino al massimo e poi ritorna'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Rowing, Seated', '12', 0, ''); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Rowing, T-bar', '12', 0, 'The execution of this exercise is very similar to the regular bent over rowing, only that the bar is fixed here.
+Grab the barbell with a wide grip (slightly more than shoulder wide) and lean forward. Your upper body is not quite parallel to the floor, but forms a slight angle. The chest''s out during the whole exercise. Pull now the barbell with a fast movement towards your belly button, not further up. Go slowly down to the initial position. Don''s swing with your body and keep your arms next to your body.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Run', '9', 0, '3-5 Mi. Run 
+Record Distance per Workout'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Run', '9', 0, 'Running or jogging outside in a park, on the tracks,...'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Run - Interval Training ', '9', 0, 'Run and do some interval trainings such as hill repat, fartlek,..'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Run - Treadmill', '9', 0, 'Run on a treadmill'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Run/Walk', '9', 0, 'Run and Walk
+-----------------------------------------------------------'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Russian Twist', '10', 0, '
+Lie down on the floor placing your feet either under something that will not move or by having a partner hold them. Your legs should be bent at the knees.
+Elevate your upper body so that it creates an imaginary V-shape with your thighs. Your arms should be fully extended in front of you perpendicular to your torso and with the hands clasped. This is the starting position.
+Twist your torso to the right side until your arms are parallel with the floor while breathing out.
+Hold the contraction for a second and move back to the starting position while breathing out. Now move to the opposite side performing the same techniques you applied to the right side.
+Repeat for the recommended amount of repetitions.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Russian Twist', '10', 0, 'https://en.wikipedia.org/wiki/Russian_twist'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Russian Twist', '10', 0, 'First, one should sit on the floor with knees bent as in a "sit-up" position. The feet should be kept together and slightly above the ground or put under a stable surface. The torso should be kept straight with the back kept off the ground at a 45 degree angle. Arms should be held together away from the body in a straight fashion and hands kept locked together like a ball or one can hold a weight to increase the difficulty. Next, the arms should be swung from one side to another in a twisting motion, with each swing to a side counting as one repetition. The slower one moves the arms from side to side, the harder the exercise becomes, working the abdomen that much better. When moving one''s arms during the exercise, it is crucial to not stop between repetitions or else one will lose the effect of working the abdomen. Constant breathing in and out during the exercise is important as one should not hold one''s breath
+ Wikipedia'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Sads', '12', '1', 'asdaasdas asdasd sd das dad asd asd as das d d sd sd sdsdssdsds s das ds das d sd asd as dasdsdasdasdas da da asdasdasda da d ad a dasd'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Sads', '12', '6', 'asdaasdas asdasd sd das dad asd asd as das d d sd sd sdsdssdsds s das ds das d sd asd as dasdsdasdasdas da da asdasdasda da d ad a dasd'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Scissors', '10', 0, 'Scissors is an abdominal exercise that strengthens the transverse abdominals, helping flatten your belly and strengthen your entire core. Scissors is not only a core strength move, but it is also a great stretch for your hamstrings and your lower back. Everyone is looking for new ways to work the core, to flatten the belly and to improve flexibility. If you learn how to do Scissors you will get everything rolled together in one move.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Seated Box Jump', '9', 0, 'jump from seated position onto box'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Seated Triceps Press', '8', '8', 'Sit down on a back (better with back support). Take a dumbbell firmly with both hands and hold it with extended arms over your head. With your palms facing upward and holding the weight of the dumbbell, slowly lower the weight behind your head.
+ '); 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Seated Triceps Press', '8', '3', 'Sit down on a back (better with back support). Take a dumbbell firmly with both hands and hold it with extended arms over your head. With your palms facing upward and holding the weight of the dumbbell, slowly lower the weight behind your head.
+ '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Seatups', '10', 0, 'put your feet on a high level and pull your self'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Selectorized Seated Cable Row,', '12', 0, 'đây là một động tác ăn vào cơ Lưng Giữa, những nhóm cơ ăn theo cũng rất nhiều là cơ lưng dưới, cơ xô và cơ tay trước.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Shay', '8', 0, 'asd sa dasd s sad sd sad asd sda asd asd asd asd sad sad sd sad sad'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Shotgun Row', '12', 0, '
+Attach a single handle to a low cable.
+After selecting the correct weight, stand a couple feet back with a wide-split stance. Your arm should be extended and your shoulder forward. This will be your starting position.
+Perform the movement by retracting the shoulder and flexing the elbow. As you pull, supinate the wrist, turning the palm upward as you go.
+After a brief pause, return to the starting position.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Shoulder Dislocations', '13', '1', 'Hold a bar or broomstick on either end. Raise the bar above the head and slowly lower the bar behind you to rest on the hips/back/butt. This exercise is to improve pasture and mobility of the shoulders. '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Shoulder Press, Barbell', '13', '1', 'Sit on a bench, the back rest should be almost vertical. Take a barbell with a shoulder wide grip and bring it up to chest height. Press the weight up, but don''s stretch the arms completely. Go slowly down and repeat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Shoulder Press, Dumbbells', '13', '3', 'Sit on a bench, the back rest should be almost vertical. Take two dumbbells and bring them up to shoulder height, the palms and the elbows point during the whole exercise to the front. Press the weights up, at the highest point they come very near but don''s touch. Go slowly down and repeat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Shoulder Press, on Machine', '13', 0, ''); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Shoulder Press, on Multi Press', '13', 0, 'The exercise is basically the same as with a free barbell:
+Sit on a bench, the back rest should be almost vertical. Take a bar with a shoulder wide grip and bring it down to chest height. Press the weight up, but don''s stretch the arms completely. Go slowly down and repeat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Shrugs, Barbells', '13', '1', 'Take a barbell and stand with a straight body, the arms are hanging freely in front of you. Lift from this position the shoulders as high as you can, but don''s bend the arms during the movement. On the highest point, make a short pause of 1 or 2 seconds before returning slowly to the initial position.
+When training with a higher weight, make sure that you still do the whole movement!'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Shrugs, Dumbbells', '13', '3', 'Stand with straight body, the hands are hanging freely on the side and hold each a dumbbell. Lift from this position the shoulders as high as you can, but don''s bend the arms during the movement. On the highest point, make a short pause of 1 or 2 seconds before returning slowly to the initial position.
+When training with a higher weight, make sure that you still do the whole movement!'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Side Crunch', '10', '4', 'Hold weight in one hand. Bend side ways to the knee. Pull upo to upright position using your obliquus.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Side Dumbbell Trunk Flexion', '12', '3', 'AKA dumbbell side bends. Stand in line with the hips with slightly bent knees, maintain the natural curvature of the spine, hand stretched by the body, grip the barbell with one hand.  Make slow and controlled torso side flexions till you reach the angle of approximately 45°.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Side-lying External Rotation', '13', 0, 'With a weight in one hand, lie on your side opposite the weight. Keep your knees slightly bent. Hold your elbow against your side, and extend your upper arm straight ahead of you. While continuing to hold your elbow against your side, rotate your upper arm 90 degrees upwards.
+It is helpful to place a towel under your armpit to help with the form on this exercise. Placing a support under your head for the duration of the exercise is also a good idea.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Side Plank', '10', '7', 'Works your obliques and helps stabilize your spine. Lie on your side and support your body between your forearm and knee to your feet.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Side Raise', '13', '1', 'Stand up or sit , keep both weights in front against legs or at side. Keep arms at around a 90 degree angle. Lift elbows up slowly and squeese traps when at topmost position. Lower the weights slowly back to starting position.
+2 seconds up, 2 seconds down'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Side to Side Push Ups', '11', 0, 'start in push up position
+lean the body weight to the right side, and complete a push up with the chest over the right hand
+come back to the centered position
+on rep 2, lean to the left side'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Single-arm Preacher Curl', '8', '3', 'Sit on the preacher curl bench and perform a bicep curl with a dumbbell in one hand. Your other hand can be at rest, or beneath your curling arm''s elbow.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Single-arm, Standing Split-stance Cable Row', '12', 0, '
+Standing in front of a cable machine, hold the cable attachment in one hand at shoulder height.
+Keep your ribs down, abs tight and tailbone tucked between your knees.
+Pull the cable back, finishing with your shoulder blade locked inward and down.
+Prevent your shoulder from shifting forward at the finish of the movement.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Single Leg Deadlift', '9', '10', '
+Hold a kettlebell in one hand, hanging to the side. Stand on one leg, on the same side that you hold the kettlebell.
+Keeping that knee slightly bent, perform a stiff-legged deadlift by bending at the hip, extending your free leg behind you for balance. Continue lowering the kettlebell until you are parallel to the ground, and then return to the upright position. Repeat for the desired number of repetitions.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Single-leg Glute Bridge', '9', 0, '
+Lay on the floor with your feet flat and knees bent.
+Raise one leg off of the ground, pulling the knee to your chest. This will be your starting position.
+Execute the movement by driving through the heel, extending your hip upward and raising your glutes off of the ground.
+Extend as far as possible, pause and then return to the starting position.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Sit Pull V', '11', 0, 'Sit and pull v grip to chest, return to starting position then repeate. '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Sitting Calf Raises', '14', 0, 'Sit on a bench for calf raises and check that the feet are half free and that you can completely stretch the calf muscles down. Pull your calves up, going as far (up) as you can. Make at the highest point a short pause of 1 or 2 seconds and go down.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Sit-ups', '10', 0, 'Sit on a mat, your calves are resting on a bench, the knees make a right angle. Hold your hands behind your neck. Go now up with a rolling movement of your back, you should feel how the individual vertebrae lose contact with the mat. At the highest point, contract your abs as much as you can and hold there for 2 sec. Go now down, unrolling your back.
+ '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Skipping - Standard', '14', 0, 'Do a single, double footed jump for each swing of the rope.
+Work on a smooth, rhythmical movement, bouncing lightly on the balls of your feet.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Slide Planks', '10', 0, 'From a basic plank place your feet on a towel or old tee shirt and rapidly slide your feet up towards your chest. Kick it up a knotch by sliding up a 45 degree angle.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Sling: Suspended Crunch', '10', 0, 'Suspend both legs in the sling. Begin with your legs straight and your hips extended. This will be your starting position.
+"Walk" forward on your arms or elbows. The further forward you go the harder it will become.
+Pull your knees up to chest quickly and release slowly back to the starting position.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Smith Machine Close-grip Bench Press', '8', 0, 'Perform a standard bench press on the smith machine, but have your hands on the bar about shoulder width apart, and keep your elbows close to your body.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Snach', '13', '1', 'Stand with your feet at hip width and your shins against the bar. Grasp the bar at double shoulder width and, keeping your lower back flat, drive your heels into the floor to begin lifting the bar. When it''s above your knees, explosively extend your hips and shrug your shoulders. Let the momentum carry the weight overhead.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Snatch', '13', '1', 'Snatching causes serious gains to your overall  wellbeing well done keep that shit up you champion you'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Snatch', '13', '1', 'Weightlifting snatch. Full snatch from ground'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Snatch', '9', '1', 'öööaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Soccer', '9', 0, 'This exercise entails anything involving soccer, including any exercises that are soccer-related.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Speed Deadlift', '9', 0, 'Deadlift with short (&lt;1min) rest between sets.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Spinning', '9', 0, 'The main muscles used in a spinning exercise are the quadriceps.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Splinter Sit-ups', '10', 0, 'Lie on your back with your legs straight and arms at your sides, keeping your elbows bent at 90 degrees. As you sit up, twist your upper body to the left and bring your left knee toward your right elbow while you swing your left arm back. Lower your body to the starting position, and repeat to your right. That''s 1 rep.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Squat', '9', 0, 'Squat is something everyone does!'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Squat Jumps', '9', 0, 'Jump wide, then close'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Squats', '9', '1', 'Make sure you have put the barbell at a height where you can comfortably take it out and put it back in. Take it out and make yourself ready:
+
+The bar is somewhat lower than your shoulders
+The feet are quite apart and point out
+The head is in your neck and looks up
+The chest is out
+
+Go now slowly down, till your thighs are parallel with the floor, not lower. The knees point outwards, your butt, out. Make a small pause of 1 second and with as much energy as you can, push the weight up. Make a pause of 2 seconds and repeat.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Standing Calf Raises', '14', 0, 'Get onto the calf raises machine, you should able to completely push your calves down. Stand straight, don''s make a hollow back and don''s bend your legs. Pull yourself up as high as you can. Make a small pause of 1 - 2 seconds and go slowly down.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Standing Rope Forearm', '8', 0, 'Grab a wrist roller tool with both hands while standing with your feet about shoulder width apart. If your gym does not have a wrist roller tool, you can easily put one together. All you need is a 5 or 10 pound weight plate, a strong thin rope about 3 feet long and a 6-8 inch stick or bar. Securely fasten the rope to the middle of the bar/stick and tie the other end of the rope to the weight plate. To begin this exercise, grab the bar/stick with both hands using an overhand grip. Extend both arms straight out in front of you, parallel to the floor. Next, roll the weight up from the floor by rapidly twisting the bar/stick with your hands and wrists. Once the weight reaches the top, slowly lower the plate back to the floor by reversing the motion of your hands and wrists. Repeat (if you can!).'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Stationary Bike', '9', 0, 'Ride a Stationary Bike with various tensions.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Stiff-legged Deadlifts', '9', '1', '
+Keep legs straight
+Keep back straight
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Straight-arm Pull Down (bar Attachment)', '12', 0, 'Use the straight bar attachment on a high pulley. Grasp the two ends of the bar with your palms facing downward and your arms straight out in front of you. Pull your hands down towards your hips, while keeping your arms straight, then raise them back up to the starting position.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Straight-arm Pull Down (rope Attachment)', '12', 0, 'Use the rope attachment on a high pulley. Grasp the two ends of the rope with your arms straight out in front of you. Pull your hands down towards your hips, while keeping your arms straight, then raise them back up to the starting position.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Sumo Deadlift', '9', 0, '
+Begin with a bar loaded on the ground. Approach the bar so that the bar intersects the middle of the feet. The feet should be set very wide, near the collars. Bend at the hips to grip the bar. The arms should be directly below the shoulders, inside the legs, and you can use a pronated grip, a mixed grip, or hook grip. Relax the shoulders, which in effect lengthens your arms.
+Take a breath, and then lower your hips, looking forward with your head with your chest up. Drive through the floor, spreading your feet apart, with your weight on the back half of your feet. Extend through the hips and knees.
+As the bar passes through the knees, lean back and drive the hips into the bar, pulling your shoulder blades together.
+Return the weight to the ground by bending at the hips and controlling the weight on the way down.
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Wall Pushup', '8', '7', 'Pushup against a wall'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Wall Slides', '12', '7', 'Stand with heels,  shoulders, back of head,  and hips touching the wall. Start with biceps straight out and elbows at a 90 degree angle. Straighten the arms while remaining againstthe wall without arching the back off of the wall, mimicking a shoulder press movement. '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Wall Squat', '9', '7', 'Find a nice flat piece of wall and stand with your back leaning against the wall. Slowly slide down the wall while moving your feet away from it, until your thighs are parallel to the ground and both your knees and your hips are bent at a 90° angle. Cross your arms in front of your chest and hold this position for 30 seconds.
+Variant: put a big inflated rubber ball (like a small basketball) between your knees and squeeze the ball while holding the squat position'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Weighted Step', '9', '1', 'Box step-ups w/ barbell, 45''s on each side'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Weighted Step-ups', '9', 0, 'box step ups w/ barbell and 45''s on each side'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'What', '10', 0, 'After you submit the form, the administrators will be notified. Once it is reviewed, it will be added to the database. Till this happens, it will not be visible in the overview or the search. In case you added your email when you registered, you will get notified when the process is completed successfully.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Wide-grip Pulldown', '12', 0, 'Lat pulldowns with a wide grip on the bar.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Wide Pull-ups', '12', '6', 'Like normal pull-ups but wider grip.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Wrist Curl', '8', '1', 'Forearm wrist Curls. 
+ 
+
+Sit on a flat bench with a dumbbell in your right hand.
+Place your feet flat on the floor, at a distance that is slightly wider than shoulder width apart.
+Lean forward and place your right forearm on top of your upper right thigh with your palm up. Tip: Make sure that the front of the wrist lies on top of your knees. This will be your starting position.
+Lower the dumbbell as far as possible as you keep a tight grip on the dumbbell. Inhale as you perform this movement.
+Now curl the dumbbell as high as possible as you contract the forearms
+Perform for the recommended amount of repetitions, switch arms and repeat the movement.
+
+ '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Wyciskanie Skos', '11', 0, 'wyciskanie skośne głowa w górę'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Yolk Walks', '13', '1', 'Grab barbell and place on shoulders then walk'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Z Curls', '8', 0, 'Perform a traditional dumbbell biceps curl, pausing at the top of the motion.
+Twist your hands until your palms are facing away from your shoulders (in reverse curl position).  Basically, twist your right wrist inwards to the left, and vice versa.
+In a slow, controlled movement, lower the Dbells with your palms facing the ground.  At the bottom of the motion, twist your wrists back into the traditional curl grip (palms facing up, towards shoulder).
+That is 1 rep
+ '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Zercher Cycle', '12', '1', 'Deadlift ; Zercher Squat combined'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Sumo Squats', '9', '1', 'Stand with your feet wider than your shoulders, with your toes pointed out at a 45 degree angle and barbell on your shoulder.
+While keeping your back straight, descend slowly by bending at the knees and hips as if you are sitting down (squatting).
+Lower yourself until your quadriceps and hamstrings are parallel to the floor.
+Return to the starting position by pressing upwards and extending your legs while maintaining an equal distribution of weight on your forefoot and heel.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Superman', '12', '4', 'Lay flat on your stomach with your arms extended in front of you on the ground as your legs are lying flat. Lift both your arms and legs at the same time, as if you were flying, and contract the lower back. Make sure that you are breathing and, depending on your fitness level, hold the movement for at least two to five seconds per repetition.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Super Squat', '12', '1', 'Yep'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Swim', '8', 0, '200 SKIMPS, 4x75 Bulge IM, 4x100 free on 1:30, 2x400 IM odd, Free even, 300 cool down'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Swimming', '9', 0, 'Freestyle stroke. Additional muscles are used that aren''s currently available to select in wger. Also, water is needed, which isn''s currently an option for equipment.'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Swimming', '10', 0, 'all body parts jh'ih'ih #oj'oj'ih; ylfotfddk trdu rol.7uy'oiuy' ikrsuhtrtdfk uiygkytrshtrdly'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Test', '10', 0, 'Test adding an exercise for software QA group project
+ '); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Test', '8', '5', 'qwertyuiop[ asdfghjkl zxcvbnm, asdfghjk qwertyui
+ 
+wertyuiosdfghjkl  
+asdfghjkl'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Test', '10', '8', 'Oh yes i forgot about this thanks!'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Test', '10', '3', 'Oh yes i forgot about this thanks!'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Test', '10', '4', 'Oh yes i forgot about this thanks!'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Test', '10', 0, 'Nothing much qwertyuiopjv  zxcvbnm,./ xcvbnmfdsasdfgh sdfcgvbhnm,'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Test', '8', '8', 'Pushupshjgfdsdfghjklkjhgfdsdfghjklksdfghjklkjhgfdsdfghjk'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Test', '10', '1', 'test123jdhjkahdkajhjhjkdahjkahdjakhdak'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'TestBicep', '8', '1', 'This is a test for my API, this will check if the exercise actually comes up in my application!'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Test Pullups', '8', 0, 'Hi, 
+This is testing
+Thats why i am writing this to full the words requirement
+thanks
+regards
+Javed Khan'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Thruster', '9', '1', '
+Start by doing a front squat
+At the top position, push the bar above your head (similar to a press)
+Lower the bar to the shoulders
+'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Trazioni Alla Sbarra Presa Inversa', '12', 0, 'Trazioni alla sbarra presa inversa'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Treee', '8', '7', 'rggfdfghgfd fkhbhfbf jhdfbjksdhfbd jhdsbfqsdjhf jhdfkpshjfbepe'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Tricep Dumbbell Kickback', '8', '3', '
+Start with a dumbbell in each hand and your palms facing your torso. Keep your back straight with a slight bend in the knees and bend forward at the waist. Your torso should be almost parallel to the floor. Make sure to keep your head up. Your upper arms should be close to your torso and parallel to the floor. Your forearms should be pointed towards the floor as you hold the weights. There should be a 90-degree angle formed between your forearm and upper arm. This is your starting position.
+Now, while keeping your upper arms stationary, exhale and use your triceps to lift the weights until the arm is fully extended. Focus on moving the forearm.
+After a brief pause at the top contraction, inhale and slowly lower the dumbbells back down to the starting position.
+Repeat the movement for the prescribed amount of repetitions.
+
+Variations: This exercise can be executed also one arm at a time much like the one arm rows are performed.
+Also, if you like the one arm variety, you can use a low pulley handle instead of a dumbbell for better peak contraction. In this case, the palms should be facing up (supinated grip) as opposed to the torso (neutral grip).'); 
+INSERT INTO exercise(EXERCISE_ID, EXERCISE_NAME, MUSCLE, EXERCISE_TYPE, EXERCISE_DESCRIPTION) 
+VALUES(EXERCISE_ID_SEQ.nextval, 'Tricep Push Down FreeWieghts', '8', 0, 'Tricep Press down machine with free weights in free weight section');
