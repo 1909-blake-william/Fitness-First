@@ -1,8 +1,15 @@
 package com.revature.factories;
 
-import com.revature.fbeans.Workout;
+import com.revature.fbeans.BuildingWorkoutFormat;
+import com.revature.fbeans.CuttingWorkoutFormat;
 
 public interface WorkoutAbstractFactory<T> {
 
-	 Workout createWorkout(String userChoice);
+	 CuttingWorkoutFormat createCuttingWorkout(String userChoice);
+	 
+	 BuildingWorkoutFormat createBuildingWorkout(String userChoice);
+
+	BuildingWorkoutFormat createBuildingWorkout();
+	
+	CuttingWorkoutFormat createCuttingWorkout();
 }

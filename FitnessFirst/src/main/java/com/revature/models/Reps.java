@@ -30,4 +30,9 @@ public class Reps {
 	private int builderReps = rnd.nextInt(7) + 6;
 	private int cuttingReps = rnd.nextInt(8) + 13;
 
+	@Override
+	public String toString() {
+		return "Reps [builderReps=" + builderReps + ", cuttingReps=" + cuttingReps + "]";
+	}
+
 }

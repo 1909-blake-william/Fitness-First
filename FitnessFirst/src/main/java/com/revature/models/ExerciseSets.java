@@ -38,6 +38,10 @@ public class ExerciseSets {
 	public void setAdvSets(int advSets) {
 		this.advSets = advSets;
 	}
+	@Override
+	public String toString() {
+		return "ExerciseSets [begSets=" + begSets + ", intSets=" + intSets + ", advSets=" + advSets + "]";
+	}
 	
 }
 	

@@ -1,9 +1,9 @@
 package com.revature.factories;
 
 import com.revature.fbeans.AssignedCuttingExercise;
-import com.revature.fbeans.Workout;
-import com.revature.fbeans.AssignedCuttingExercise;
-public class CuttingWorkout implements Workout {
+import com.revature.fbeans.CuttingWorkoutFormat;
+
+public class CuttingWorkout implements CuttingWorkoutFormat {
 
 AssignedCuttingExercise aE = new AssignedCuttingExercise();	
 	
@@ -33,8 +33,9 @@ AssignedCuttingExercise aE = new AssignedCuttingExercise();
 
 	@Override
 	public String toString() {
-		return "CuttingWorkout [aE=" + aE + ", a1()=" + a1() + ", a2()=" + a2() + ", a3()=" + a3() + ", a4()=" + a4()
-				+ "]";
+		return "CuttingWorkout [a1()=" + a1() + ", a2()=" + a2() + ", a3()=" + a3() + ", a4()=" + a4() + "]";
 	}
+
+
 
 }

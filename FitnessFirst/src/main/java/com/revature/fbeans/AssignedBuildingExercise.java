@@ -7,13 +7,14 @@ import com.revature.models.ExerciseSets;
 import com.revature.models.Reps;
 import com.revature.models.User;
 
-public class AssignedCuttingExercise implements AssignedExercise {
+public class AssignedBuildingExercise implements AssignedExercise {
 	ExerciseDao exerDao = ExerciseDao.currentImplementation;
 	UserDao userD = UserDao.currentImplementation;
 	private User user = User.getInstance();
 	ExerciseSets exerSet = new ExerciseSets();
 	Reps exerRep = new Reps();
 	
+	@Override
 	public Exercise filteredExercise() {
 		if (user.getUserLevel() <= 3) {
 			return exerDao.filter1ForBeginnerUB();
@@ -24,14 +25,10 @@ public class AssignedCuttingExercise implements AssignedExercise {
 			return exerDao.filter1ForAdvancedUB();
 		}
 		return null;
-	}
-
-	// FIND A WAY TO FIND BY SQL INDEX
-	// MAKE SURE YOU CAN FILTER
-	// THEN USE RANDOM NUMBER TO PICK ONE
-
+	}	// TODO Auto-generated method stub
 	
 
+	@Override
 	public int assignedSets() {
 		if (user.getUserLevel() <= 3) {
 			return exerSet.getBegSets();
@@ -43,16 +40,20 @@ public class AssignedCuttingExercise implements AssignedExercise {
 		}
 		return 0;
 	}
-	public int assignedReps() {
 
-		return exerRep.getCuttingReps();
+	@Override
+	public int assignedReps() {
+		
+		return exerRep.getBuilderReps();
 	}
+
 
 	@Override
 	public String toString() {
-		return "AssignedCuttingExercise [filteredExercise()=" + filteredExercise() + ", assignedSets()="
+		return "AssignedBuildingExercise [filteredExercise()=" + filteredExercise() + ", assignedSets()="
 				+ assignedSets() + ", assignedReps()=" + assignedReps() + "]";
 	}
+
 
 
 
