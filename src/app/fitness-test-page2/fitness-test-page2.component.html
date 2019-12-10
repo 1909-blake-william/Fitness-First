@@ -1,0 +1,21 @@
+
+    <!--<button # = quizButton (click) = "ngAfterViewInit()">Take Fitness Test</button>-->
+    <!--<button id = "startQuiz" routerLink = "/fitnessTest">Take Fitness Test</button>-->
+    
+    <div>
+        <p id = "exerciseMessage"> The next exercise is planks!</p>
+        <p> Get Ready</p>
+        <!-- id = "startExercise"-->
+        <button (click) = "startTimer()">Go!</button> &nbsp;
+        <button (click)="pauseTimer()">Pause</button>
+        
+        <p id = "afterExerciseMessage"> Did you hold the plank for the entire time?</p>
+        <form>
+            <input type = "radio"><label>yes</label> <br>
+            <input type = "radio"><label>no</label><br>
+            <!--<input type = "radio"> Greater than 50</input>-->
+            <!--<button (click) = ngAfterViewInit() id = "nextButton">Next Exercise</button>-->
+            <button id = "nextButton" routerLink = "/fitnessTestPage3">Next Exercise</button>
+            <p>{{timeLeft}} Seconds Left....</p> 
+        </form>
+        </div>
