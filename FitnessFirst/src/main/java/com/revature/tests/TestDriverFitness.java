@@ -1,11 +1,12 @@
 package com.revature.tests;
 
 import com.revature.daos.ExerciseDao;
-import com.revature.factories.CuttingWorkout;
+import com.revature.factories.CuttingWorkoutFactory;
 import com.revature.factories.WorkoutFactory;
 import com.revature.fbeans.AssignedCuttingExercise;
 import com.revature.models.ExerciseSets;
 import com.revature.models.Reps;
+import com.revature.models.User;
 
 
 public class TestDriverFitness {
@@ -15,11 +16,12 @@ public class TestDriverFitness {
 //	Workout builderW = WorkoutFactory.	
 		// TODO Auto-generated method stub
 		ExerciseDao justWork = ExerciseDao.currentImplementation;
-		CuttingWorkout cW = new CuttingWorkout();
+		CuttingWorkoutFactory cW = new CuttingWorkoutFactory();
 		ExerciseSets eS = new ExerciseSets();
 		AssignedCuttingExercise aE = new AssignedCuttingExercise();
 		Reps r = new Reps();
-		WorkoutFactory theFactory = new WorkoutFactory();
+	//	WorkoutFactory theFactory = new WorkoutFactory();
+		User user = User.getInstance();
 		//System.out.println(justWork.filterForBeginnerUB());
 		
 	//	System.out.println(justWork.filter1ForBeginnerLB());
@@ -30,8 +32,8 @@ public class TestDriverFitness {
 	//	System.out.println(cW);
 	//	System.out.println(eS);
 	//	System.out.println(r);
-		
-		System.out.println(theFactory.createBuildingWorkout());
+		System.out.println(cW);
+	//	System.out.println(theFactory.createCuttingWorkout("Cut"));
 	}
 
 }

@@ -1,10 +1,10 @@
 package com.revature.fbeans;
 
 
-import com.revature.factories.CuttingWorkout;
+import com.revature.factories.CuttingWorkoutFactory;
 
 public interface CuttingWorkoutFormat {
-	CuttingWorkoutFormat currentImplementation = new CuttingWorkout();
+	CuttingWorkoutFormat currentImplementation = new CuttingWorkoutFactory();
 	AssignedCuttingExercise a1();
 	AssignedCuttingExercise a2();
 	AssignedCuttingExercise a3();

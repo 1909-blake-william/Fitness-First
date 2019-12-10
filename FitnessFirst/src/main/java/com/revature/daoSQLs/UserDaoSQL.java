@@ -28,8 +28,9 @@ public class UserDaoSQL implements UserDao {
 		String rsConsiderations = rs.getString("considerations");
 		int rsUserLevel = rs.getInt("user_level");
 		int rsUserPoints = rs.getInt("points");
+		int rsUserChoice = rs.getInt("choice");
 		user.setNewUser(rsUserId, rsUsername, rsUserPassword, rsFirstname, rsLastname, rsEmail, rsGender, rsHeight,
-				rsWeight, rsConsiderations, rsUserLevel, rsUserPoints);
+				rsWeight, rsConsiderations, rsUserLevel, rsUserPoints, rsUserChoice);
 
 	}
 
@@ -39,26 +40,26 @@ public class UserDaoSQL implements UserDao {
 	}
 
 	public List<User> findAll() {
-		try (Connection c = ConnectionUtility.getConnection()) {
-
-			String sql = "SELECT * FROM wger_user";
-
-			PreparedStatement ps = c.prepareStatement(sql);
-
-			ResultSet rs = ps.executeQuery();
-			List<User> users = new ArrayList<User>();
-			while (rs.next()) {
-				users.add(extractUser(rs));
-			}
-
-			return users;
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
+//		try (Connection c = ConnectionUtility.getConnection()) {
+//
+//			String sql = "SELECT * FROM wger_user";
+//
+//			PreparedStatement ps = c.prepareStatement(sql);
+//
+//			ResultSet rs = ps.executeQuery();
+//			List<User> users = new ArrayList<User>();
+//			while (rs.next()) {
+//				users.add(extractUser(rs));
+//			}
+//
+//			return users;
+//
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+////			e.printStackTrace();
 			return null;
 		}
-	}
+	
 
 	public User findById(int ersUserId) {
 		// TODO Auto-generated method stub

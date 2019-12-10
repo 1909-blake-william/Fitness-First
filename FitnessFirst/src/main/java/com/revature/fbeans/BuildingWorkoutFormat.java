@@ -1,10 +1,10 @@
 package com.revature.fbeans;
 
 
-import com.revature.factories.BuildingWorkout;
+import com.revature.factories.BuildingWorkoutFactory;
 
 public interface BuildingWorkoutFormat {
-	BuildingWorkoutFormat currentImplementation = new BuildingWorkout();
+	BuildingWorkoutFormat currentImplementation = new BuildingWorkoutFactory();
 
 
 	public AssignedBuildingExercise a1(); 

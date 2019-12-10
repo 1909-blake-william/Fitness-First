@@ -1,11 +1,10 @@
 package com.revature.factories;
 
 import com.revature.fbeans.AssignedBuildingExercise;
-import com.revature.fbeans.AssignedCuttingExercise;
 import com.revature.fbeans.BuildingWorkoutFormat;
 ;
 
-public class BuildingWorkout implements BuildingWorkoutFormat {
+public class BuildingWorkoutFactory implements BuildingWorkoutFormat {
 	AssignedBuildingExercise aE = new AssignedBuildingExercise();
 	@Override
 	public AssignedBuildingExercise a1() {

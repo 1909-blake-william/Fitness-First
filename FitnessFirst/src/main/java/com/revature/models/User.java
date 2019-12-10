@@ -1,6 +1,14 @@
 package com.revature.models;
 
 public class User {
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", username=" + username + ", userPassword=" + userPassword + ", firstname="
+				+ firstname + ", lastname=" + lastname + ", email=" + email + ", gender=" + gender + ", height="
+				+ height + ", weight=" + weight + ", considerations=" + considerations + ", userLevel=" + userLevel
+				+ ", userPoints=" + userPoints + ", userChoice=" + userChoice + "]";
+	}
+
 	private static User instance = new User();
 	private int userId;
 	private String username;
@@ -14,6 +22,7 @@ public class User {
 	private String considerations; 
 	private int userLevel;
 	private int userPoints;
+	private int userChoice;
 	
 	private User() {}
 	
@@ -22,7 +31,7 @@ public class User {
 	}
 
 	public void setNewUser(int userId, String username, String userPassword, String firstname, String lastname, String email,
-			String gender, int height, int weight, String considerations, int userLevel, int userPoints) {
+			String gender, int height, int weight, String considerations, int userLevel, int userPoints, int userChoice) {
 		this.userId = userId;
 		this.username = username;
 		this.userPassword = userPassword;
@@ -35,6 +44,7 @@ public class User {
 		this.considerations = considerations;
 		this.userLevel = userLevel;
 		this.userPoints = userPoints;
+		this.userChoice = userChoice;
 	}
 	
 	public void setNoUser() {
@@ -50,6 +60,7 @@ public class User {
 		this.considerations = null;
 		this.userLevel = 0;
 		this.userPoints = 0;
+		this.userChoice = 0;
 	}
 
 	public int getUserId() {
@@ -158,6 +169,7 @@ public class User {
 		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
 		result = prime * result + height;
 		result = prime * result + ((lastname == null) ? 0 : lastname.hashCode());
+		result = prime * result + userChoice;
 		result = prime * result + userId;
 		result = prime * result + userLevel;
 		result = prime * result + ((userPassword == null) ? 0 : userPassword.hashCode());
@@ -203,6 +215,8 @@ public class User {
 				return false;
 		} else if (!lastname.equals(other.lastname))
 			return false;
+		if (userChoice != other.userChoice)
+			return false;
 		if (userId != other.userId)
 			return false;
 		if (userLevel != other.userLevel)
@@ -224,12 +238,17 @@ public class User {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "User [userId=" + userId + ", username=" + username + ", userPassword=" + userPassword + ", firstname="
-				+ firstname + ", lastname=" + lastname + ", email=" + email + ", gender=" + gender + ", height="
-				+ height + ", weight=" + weight + ", considerations=" + considerations + ", userLevel=" + userLevel
-				+ ", userPoints=" + userPoints + "]";
+
+	public int getUserChoice() {
+		return userChoice;
+	}
+
+	public void setUserChoice(int userChoice) {
+		this.userChoice = userChoice;
+	}
+
+	public static void setInstance(User instance) {
+		User.instance = instance;
 	}
 
 }

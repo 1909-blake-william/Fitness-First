@@ -3,7 +3,7 @@ package com.revature.factories;
 import com.revature.fbeans.AssignedCuttingExercise;
 import com.revature.fbeans.CuttingWorkoutFormat;
 
-public class CuttingWorkout implements CuttingWorkoutFormat {
+public class CuttingWorkoutFactory implements CuttingWorkoutFormat {
 
 AssignedCuttingExercise aE = new AssignedCuttingExercise();	
 	
