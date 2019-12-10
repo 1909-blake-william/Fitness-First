@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" version="4.0">
+  <display-name>FitnessFirst</display-name>
+  <servlet>
+  <servlet-name>AuthServlet</servlet-name>
+  <servlet-class>com.revature.web.AuthServlet</servlet-class> 
+  </servlet>
+  
+  <servlet-mapping>
+  <servlet-name>AuthServlet</servlet-name>
+  <url-pattern>/api/login</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  <servlet-name>DispatcherServlet</servlet-name>
+  <servlet-class>com.revature.web.DispatcherServlet</servlet-class> 
+  </servlet>
+  
+  <servlet-mapping>
+  <servlet-name>DispatcherServlet</servlet-name>
+  <url-pattern>/api/*</url-pattern>
+  </servlet-mapping>
+</web-app>

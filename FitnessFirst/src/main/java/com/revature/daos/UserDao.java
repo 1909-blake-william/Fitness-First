@@ -4,16 +4,15 @@ import com.revature.models.User;
 
 public interface UserDao {
 	
-	int updatePoints();
-	int updateWorkOutLog();
-	int updateWeight();
+	int updatePoints(User currentUser);
+	int updateWorkOutLog(User currentUser);
+	int updateWeight(User currentUser);
 	int save (User currentUser);
 	int remove (User currentUser);
-	
+	int increaseLevel(User currentUser);
 	User findByUsername(String username);
 	User findByUsernameAndPassword(String username, String password);
-	User setUsername();
-	String updateConsiderations();
+	User updateConsiderations(User currentUser);
 	
 	
 	

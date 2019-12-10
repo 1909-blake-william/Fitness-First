@@ -25,6 +25,8 @@ public interface ExerciseDao {
 	int decreaseIntensity(); 
 	
 	Exercise findById();
+	Exercise findByName(String exerciseName);
+	int save (Exercise currentExercise);
 	
 	//based on if the user goes through some sort of injury or drastic lifestyle change
 	//notifications, hyperlink to userprofile What's wrong?
