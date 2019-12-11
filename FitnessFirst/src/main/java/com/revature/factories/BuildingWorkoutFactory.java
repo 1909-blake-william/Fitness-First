@@ -2,29 +2,30 @@ package com.revature.factories;
 
 import com.revature.fbeans.AssignedBuildingExercise;
 import com.revature.fbeans.BuildingWorkoutFormat;
+import com.revature.models.Workout;
 ;
 
-public class BuildingWorkoutFactory implements BuildingWorkoutFormat {
+public class BuildingWorkoutFactory extends Workout {
 	AssignedBuildingExercise aE = new AssignedBuildingExercise();
-	@Override
+	
 	public AssignedBuildingExercise a1() {
 		// TODO Auto-generated method stub
 		return aE;
 	}
 
-	@Override
+	
 	public AssignedBuildingExercise a2() {
 		// TODO Auto-generated method stub
 		return aE;
 	}
 
-	@Override
+	
 	public AssignedBuildingExercise a3() {
 		// TODO Auto-generated method stub
 		return aE;
 	}
 
-	@Override
+	
 	public AssignedBuildingExercise a4() {
 		// TODO Auto-generated method stub
 		return aE;

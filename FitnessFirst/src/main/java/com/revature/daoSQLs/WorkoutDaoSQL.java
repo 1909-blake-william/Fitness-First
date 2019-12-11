@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.daos.WorkoutDao;
+import com.revature.factories.BuildingWorkoutFactory;
+import com.revature.factories.CuttingWorkoutFactory;
+import com.revature.models.User;
 import com.revature.models.Workout;
 import com.revature.utilities.ConnectionUtility;
 
@@ -127,7 +130,29 @@ public class WorkoutDaoSQL implements WorkoutDao {
 }
 
 
-
-
-
+	@Override
+	public Workout createWorkout(int userChoice) {
+	User.getInstance().setUserChoice(userChoice);
+	if (userChoice == 1) {
+		return new BuildingWorkoutFactory();
+	}
+	else if (userChoice == 2) {
+		return new CuttingWorkoutFactory();
+	}
+	else
+	return null;
 }
+
+
+	@Override
+	public Workout createWorkout(User userChoice) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}
+
+
+
+
+
+

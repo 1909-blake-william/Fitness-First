@@ -2,30 +2,31 @@ package com.revature.factories;
 
 import com.revature.fbeans.AssignedCuttingExercise;
 import com.revature.fbeans.CuttingWorkoutFormat;
+import com.revature.models.Workout;
 
-public class CuttingWorkoutFactory implements CuttingWorkoutFormat {
+public class CuttingWorkoutFactory extends Workout {
 
 AssignedCuttingExercise aE = new AssignedCuttingExercise();	
 	
-	@Override
+
 	public AssignedCuttingExercise a1() {
 		
 		return aE;
 	}
 
-	@Override
+	
 	public AssignedCuttingExercise a2() {
 		// TODO Auto-generated method stub
 		return aE;
 	}
 
-	@Override
+	
 	public AssignedCuttingExercise a3() {
 		// TODO Auto-generated method stub
 		return aE;
 	}
 
-	@Override
+	
 	public AssignedCuttingExercise a4() {
 		// TODO Auto-generated method stub
 		return aE;

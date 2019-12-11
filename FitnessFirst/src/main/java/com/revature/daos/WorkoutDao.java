@@ -3,6 +3,7 @@ package com.revature.daos;
 import java.util.List;
 
 import com.revature.daoSQLs.WorkoutDaoSQL;
+import com.revature.models.User;
 import com.revature.models.Workout;
 
 public interface WorkoutDao {
@@ -14,6 +15,8 @@ public interface WorkoutDao {
 	 * @param r the reimbursement to be created
 	 * @return the generated id for the reimbursement
 	 */
+	
+	
 	int save(Workout w);
 	
 	int update(Workout w);
@@ -23,4 +26,8 @@ public interface WorkoutDao {
 	List<Workout> findByUserId(int workoutUser);
 
 	List<Workout> findByCompletedStatusId(Workout w);
+
+	Workout createWorkout(User userChoice);
+
+	Workout createWorkout(int userChoice);
 }
