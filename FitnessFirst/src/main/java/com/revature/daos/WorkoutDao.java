@@ -27,7 +27,5 @@ public interface WorkoutDao {
 
 	List<Workout> findByCompletedStatusId(Workout w);
 
-	Workout createWorkout(User userChoice);
-
 	Workout createWorkout(int userChoice);
 }

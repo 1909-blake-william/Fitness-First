@@ -31,7 +31,7 @@ public class WorkoutServlet extends HttpServlet {
 				"Origin, Methods, Credentials, X-Requested-With, Content-Type, Accept");
 		resp.addHeader("Access-Control-Allow-Credentials", "true");
 		resp.setContentType("application/json");
-		// TODO Auto-generated method stub
+	
 		super.service(req, resp);
 
 	}
@@ -59,16 +59,6 @@ public class WorkoutServlet extends HttpServlet {
 		resp.setStatus(201);
 	}
 
-//	@Override
-//	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//
-//		ObjectMapper om = new ObjectMapper();
-//		Reimbursement r = (Reimbursement) om.readValue(req.getReader(), Reimbursement.class);
-//LoginForm form = (LoginForm) Json.read(request.getInputStream(), LoginForm.class);
-//		reimbDao.update(r);
-//
-//		resp.setStatus(201);
-//	}
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		Workout w = (Workout) OmSingleton.read(req.getInputStream(), Workout.class);
