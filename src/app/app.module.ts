@@ -14,6 +14,9 @@ import { TimerService } from './timer.service';
 import { FitnessTestPage2Component } from './fitness-test-page2/fitness-test-page2.component';
 import { FitnessTestPage3Component } from './fitness-test-page3/fitness-test-page3.component';
 import { FitnessTestPage4Component } from './fitness-test-page4/fitness-test-page4.component';
+import { WorkoutComponent } from './workout/workout.component';
+import { HomeComponent } from './home/home.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { FitnessTestPage4Component } from './fitness-test-page4/fitness-test-pag
     NavbarComponent,
     FitnessTestPage2Component,
     FitnessTestPage3Component,
-    FitnessTestPage4Component
+    FitnessTestPage4Component,
+    WorkoutComponent,
+    HomeComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

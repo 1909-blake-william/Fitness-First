@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { User } from '../models/user';
-import { Observable } from 'rxjs';
-import { publishLast } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+//import { publishLast } from 'rxjs/operators';
 
 @Component({
   selector: 'app-log-in',
@@ -17,12 +17,20 @@ export class LogInComponent implements OnInit {
     password: ''
   };
   users$: Observable<User>;
+  errorMessage = '';
+  errorMessageSubscription: Subscription;
 
   ngOnInit() {
+    // logout when user clicks logout
+    // every time the subject publishes new content
+    // it will invoke the subscriber method
+    this.errorMessageSubscription = this.authService.$loginError.subscribe(errorMessage => {
+      this.errorMessage = errorMessage;
+    });
   }
 
  postUser(){
-  this.users$ = this.authService.postUser(this.credentials);
+  this.authService.postUser(this.credentials);
 
 }
 }

@@ -2,6 +2,8 @@
     <form>
         <input type = "text" name = "input-userName" placeholder = "username" [(ngModel)]="credentials.username">
         <input type = "password" name = "input-userPass" placeholder = "password" [(ngModel)]="credentials.password">
-        <input type = "submit" (submit) = "postUser()" name = "submitButton">
+        <input type = "submit" (click) = "postUser()" name = "submitButton">
+
+        <p id="error-message">{{errorMessage}}</p>
     </form>
 </div>

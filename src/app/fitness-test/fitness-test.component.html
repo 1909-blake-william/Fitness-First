@@ -11,12 +11,13 @@
 <button (click)="pauseTimer()">Pause</button>
 <p id = "afterExerciseMessage"> How many squats did you do?</p>
 <form>
-    <input type = "radio" (click) = "addPoints(10)"><label>10-20</label><br>
-    <input type = "radio" (click) = "addPoints(20)"><label>20-40</label><br>
-    <input type = "radio" (click) = "addPoints(40)"><label>Greater than 40</label><br>
+    <input type = "radio" name = "results" (click) = "addPoints(10)"><label>10-20</label><br>
+    <input type = "radio" name = "results" (click) = "addPoints(20)"><label>20-40</label><br>
+    <input type = "radio" name = "results" (click) = "addPoints(40)"><label>Greater than 40</label><br>
     <button id = "nextPage" routerLink = "/fitnessTestPage2">Next Exercise</button>
 
     <p>{{timeLeft}} Seconds Left....</p> 
+    <p>You received {{squatPoints}} points for this exercise</p>
     <!--<button (click) = ngAfterViewInit() id = "nextButton">Next Exercise</button>-->
 </form>
 </div>

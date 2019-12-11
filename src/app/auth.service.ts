@@ -41,7 +41,7 @@ export class AuthService implements OnInit{
   }
     public postUser(credentials) {
       const endpointUrl = 'localhost:8080/FitnessFirst/auth/login';
-      /**/
+      
   
       this.http.post<User>(endpointUrl, credentials, {
         withCredentials: true
@@ -52,8 +52,14 @@ export class AuthService implements OnInit{
       },
       err => {
         console.log(err);
-        this.loginErrorStream.next('Login failed');
+        this.loginErrorStream.next('Login fail');
       }
     );
     }
+
+    /*public postUser(credentials) {
+      const endpointUrl = 'localhost:8080/FitnessFirst/auth/login';
+      
+      this.http.post<User>(endpointUrl, JSON.stringify(credentials));
+    }*/
 }
