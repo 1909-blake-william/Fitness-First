@@ -11,9 +11,9 @@
         
         <p id = "afterExerciseMessage"> How many crunches did you do?</p>
         <form>
-            <input type = "radio"><label>10-20</label><br>
-            <input type = "radio"><label>20-40</label><br>
-            <input type = "radio"><label>Greater than 40</label><br>
+            <input type = "radio" (click) = "addPoints(10)"><label>10-20</label><br>
+            <input type = "radio" (click) = "addPoints(20)"><label>20-40</label><br>
+            <input type = "radio" (click) = "addPoints(40)"><label>Greater than 40</label><br>
             <button routerLink = "/profile" [disabled] = "timeLeft > 0">Submit </button>
             <p>{{timeLeft}} Seconds Left....</p> 
             <!--<button (click) = ngAfterViewInit() id = "nextButton">Next Exercise</button>-->

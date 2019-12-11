@@ -11,9 +11,9 @@
         
         <p id = "afterExerciseMessage"> Did you hold the plank for the entire time?</p>
         <form>
-            <input type = "radio"><label>yes</label> <br>
-            <input type = "radio"><label>no</label><br>
-            <!--<input type = "radio"> Greater than 50</input>-->
+            <input type = "radio" (click) = "addPoints(10)"><label>yes</label> <br>
+            <input type = "radio" (click) = "addPoints(40)"><label>no</label><br>
+            
             <!--<button (click) = ngAfterViewInit() id = "nextButton">Next Exercise</button>-->
             <button id = "nextButton" routerLink = "/fitnessTestPage3">Next Exercise</button>
             <p>{{timeLeft}} Seconds Left....</p> 

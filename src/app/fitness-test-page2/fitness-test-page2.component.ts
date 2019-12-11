@@ -9,6 +9,7 @@ export class FitnessTestPage2Component implements OnInit {
 
   timeLeft: number = 90;
   interval;
+  plankPoints : number;
   constructor(){
   
   }
@@ -31,5 +32,13 @@ export class FitnessTestPage2Component implements OnInit {
     pauseTimer() {
       clearInterval(this.interval);
     }
-
+    addPoints(planks){
+      if (planks === 10){
+        this.plankPoints = 10;
+      } else if (planks === 40){
+        this.plankPoints = 40;
+      } else {
+        this.plankPoints = 0;
+      }
+    }
 }

@@ -13,6 +13,7 @@ export class FitnessTestComponent implements OnInit/*, AfterContentInit */{
   //constructor(private resolver: ComponentFactoryResolver){}
 timeLeft: number = 90;
 interval;
+squatPoints: number;
 constructor(){
 
 }
@@ -34,6 +35,18 @@ constructor(){
 
   pauseTimer() {
     clearInterval(this.interval);
+  }
+
+  addPoints(squats){
+    if (squats === 10){
+      this.squatPoints = 10;
+    } else if (squats === 20){
+      this.squatPoints = 20;
+    } else if (squats === 40){
+      this.squatPoints = 40;
+    } else {
+      this.squatPoints = 0;
+    }
   }
 
   /*ngAfterViewInit(){
