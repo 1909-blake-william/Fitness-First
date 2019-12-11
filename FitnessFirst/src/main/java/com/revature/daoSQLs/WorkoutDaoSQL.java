@@ -58,13 +58,13 @@ public class WorkoutDaoSQL implements WorkoutDao {
 	public int update(Workout w) {
 		try (Connection c = ConnectionUtility.getConnection()) {
 			String sql = " UPDATE workout"
-					+ " SET completed = ?"
+					+ " SET completed = 2"
 					+ " WHERE workout_id = ?";
 
 			CallableStatement cs = c.prepareCall(sql);
-
-			cs.setInt(1, w.getCompleted());
-			cs.setInt(2, w.getWorkoutId());
+			//hard setting my break this. here was the original: cs.setInt(1, w.getCompleted());
+			
+			cs.setInt(1, w.getWorkoutId());
 			return cs.executeUpdate();
 			
 		} catch (SQLException e) {

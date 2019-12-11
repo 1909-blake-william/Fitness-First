@@ -1,6 +1,7 @@
 package com.revature.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -8,9 +9,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import com.revature.daos.WorkoutDao;
+
 import com.revature.models.User;
 import com.revature.models.Workout;
+
 import com.revature.utilities.OmSingleton;
 
 public class WorkoutServlet extends HttpServlet {
@@ -45,4 +49,30 @@ public class WorkoutServlet extends HttpServlet {
 		resp.getOutputStream().write(json);
 
 	}
+
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Workout w = (Workout) OmSingleton.read((InputStream) req.getSession(), Workout.class);
+
+		workoutDao.save(w);
+		byte[] json = OmSingleton.write(req.getSession().getAttribute("workout"));
+		resp.getOutputStream().write(json);
+		resp.setStatus(201);
+	}
+
+//	@Override
+//	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//
+//		ObjectMapper om = new ObjectMapper();
+//		Reimbursement r = (Reimbursement) om.readValue(req.getReader(), Reimbursement.class);
+//LoginForm form = (LoginForm) Json.read(request.getInputStream(), LoginForm.class);
+//		reimbDao.update(r);
+//
+//		resp.setStatus(201);
+//	}
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+		Workout w = (Workout) OmSingleton.read(req.getInputStream(), Workout.class);
+		workoutDao.update(w);
+	}
+
 }
