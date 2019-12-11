@@ -16,18 +16,13 @@ export class LogInComponent implements OnInit {
     username: '',
     password: ''
   };
-  users$: Observable<User[]>;
+  users$: Observable<User>;
 
   ngOnInit() {
   }
 
  postUser(){
-  this.users$ = this.authService.postUser(this.credentials).publishLast().refCount();
-   this.authService.postUser(this.credentials).subscribe({
-    next:
-    error:
-    complete: 
-   });
- }
+  this.users$ = this.authService.postUser(this.credentials);
 
+}
 }
